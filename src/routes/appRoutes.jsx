@@ -7,6 +7,8 @@ import Profile from "../pages/profile/profile.jsx";
 import ProtectedRoute from "../components/protectedRoute.jsx";
 import AppliedJobs from "../pages/jobs/appliedJobs.jsx";
 import JobDetails from "../pages/jobs/jobDetails.jsx";
+import Dashboard from "../pages/recruiter/dashboard.jsx";
+import CreateCompany from "../pages/recruiter/createCompany.jsx";
 
 function AppRoutes() {
     return (
@@ -45,6 +47,19 @@ function AppRoutes() {
                 <Route
                     path="/jobs/:id"
                     element={<JobDetails />}
+                />
+
+                <Route
+                    path="/recruiter/dashboard"
+                    element={
+                        <ProtectedRoute>
+                            <Dashboard />
+                        </ProtectedRoute>}
+                />
+
+                <Route
+                    path="/recruiter/company"
+                    element={<CreateCompany />}
                 />
 
             </Routes>
