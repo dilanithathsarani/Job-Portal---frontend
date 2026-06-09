@@ -9,6 +9,7 @@ import AppliedJobs from "../pages/jobs/appliedJobs.jsx";
 import JobDetails from "../pages/jobs/jobDetails.jsx";
 import Dashboard from "../pages/recruiter/dashboard.jsx";
 import CreateCompany from "../pages/recruiter/createCompany.jsx";
+import CreateJob from "../pages/recruiter/createJob.jsx";
 
 function AppRoutes() {
     return (
@@ -60,6 +61,11 @@ function AppRoutes() {
                 <Route
                     path="/recruiter/company"
                     element={<CreateCompany />}
+                />
+
+                <Route
+                    path="/recruiter/create-job"
+                    element={<CreateJob />}
                 />
 
             </Routes>
