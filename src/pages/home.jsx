@@ -17,6 +17,19 @@ function Home() {
                         Search thousands of jobs and opportunities.
                     </p>
 
+                    <button
+                        className="
+            mt-8
+            bg-blue-600
+            text-white
+            px-6
+            py-3
+            rounded
+            "
+                    >
+                        Explore Jobs
+                    </button>
+
                 </div>
 
             </div>
