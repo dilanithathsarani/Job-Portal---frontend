@@ -40,6 +40,39 @@ function ViewApplicants() {
 
     };
 
+    const updateStatus = async (id, status) => {
+
+        try {
+
+            const token =
+                localStorage.getItem("token");
+
+            await api.put(
+
+                `/application/status/${id}`,
+
+                {
+                    status
+                },
+
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+
+            );
+
+            fetchApplicants();
+
+        } catch (error) {
+
+            console.log(error);
+
+        }
+
+    };
+
     return (
 
         <>
@@ -107,6 +140,35 @@ function ViewApplicants() {
                                 <td>
 
                                     Pending
+
+                                </td>
+
+                                <td>
+
+                                    <select
+                                        defaultValue={app.status}
+                                        onChange={(e) =>
+                                            updateStatus(
+                                                app._id,
+                                                e.target.value
+                                            )
+                                        }
+                                        className="border p-2 rounded"
+                                    >
+
+                                        <option>Applied</option>
+
+                                        <option>Under Review</option>
+
+                                        <option>Shortlisted</option>
+
+                                        <option>Interview</option>
+
+                                        <option>Rejected</option>
+
+                                        <option>Hired</option>
+
+                                    </select>
 
                                 </td>
 
