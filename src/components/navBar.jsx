@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import NotificationBell from "./NotificationBell";
 
 function Navbar() {
 
@@ -65,9 +66,10 @@ function Navbar() {
                     </Link>
 
                     {token ? (
-
-                        <div
-                            className="relative"
+                        <>
+                            <NotificationBell />
+                            <div
+                                className="relative"
                             ref={dropdownRef}
                         >
                             <button
@@ -255,7 +257,7 @@ function Navbar() {
                             )}
 
                         </div>
-
+                        </>
                     ) : (
                         <div className="flex items-center space-x-3">
                             <Link
