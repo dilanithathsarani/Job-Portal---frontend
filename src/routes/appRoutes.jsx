@@ -13,6 +13,7 @@ import CreateJob from "../pages/recruiter/createJob.jsx";
 import ManageJobs from "../pages/recruiter/ManageJobs.jsx";
 import ViewApplicants from "../pages/recruiter/ViewApplicants.jsx";
 import AdminDashboard from "../pages/admin/Dashboard.jsx";
+import ManageUsers from "../pages/admin/ManageUsers.jsx";
 
 function AppRoutes() {
     return (
@@ -90,6 +91,15 @@ function AppRoutes() {
                     element={
                         <ProtectedRoute>
                             <AdminDashboard />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/admin/users"
+                    element={
+                        <ProtectedRoute>
+                            <ManageUsers />
                         </ProtectedRoute>
                     }
                 />
