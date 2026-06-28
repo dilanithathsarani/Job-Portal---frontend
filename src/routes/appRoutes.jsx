@@ -11,6 +11,7 @@ import Dashboard from "../pages/recruiter/dashboard.jsx";
 import CreateCompany from "../pages/recruiter/createCompany.jsx";
 import CreateJob from "../pages/recruiter/createJob.jsx";
 import ManageJobs from "../pages/recruiter/ManageJobs.jsx";
+import ViewApplicants from "../pages/recruiter/ViewApplicants.jsx";
 
 function AppRoutes() {
     return (
@@ -72,6 +73,15 @@ function AppRoutes() {
                 <Route
                     path="/recruiter/manage-jobs"
                     element={<ManageJobs />}
+                />
+
+                <Route
+                    path="/recruiter/applicants/:jobId"
+                    element={
+                        <ProtectedRoute>
+                            <ViewApplicants />
+                        </ProtectedRoute>
+                    }
                 />
 
             </Routes>
