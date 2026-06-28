@@ -7,6 +7,7 @@ function Jobs() {
     const [jobs, setJobs] = useState([]);
     const [filteredJobs, setFilteredJobs] = useState([]);
     const [search, setSearch] = useState("");
+    const [jobType, setJobType] = useState("");
 
     useEffect(() => {
         fetchJobs();
@@ -26,18 +27,43 @@ function Jobs() {
         }
     };
 
+    const filterJobs = (searchValue, typeValue) => {
+
+        const filtered = jobs.filter((job) => {
+
+            const searchMatch =
+                job.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+                job.location.toLowerCase().includes(searchValue.toLowerCase());
+
+            const typeMatch =
+                typeValue === "" ||
+                job.jobType === typeValue;
+
+            return searchMatch && typeMatch;
+
+        });
+
+        setFilteredJobs(filtered);
+
+    };
+
     const handleSearch = (e) => {
 
         const value = e.target.value;
 
         setSearch(value);
 
-        const filtered = jobs.filter((job) =>
-            job.title.toLowerCase().includes(value.toLowerCase()) ||
-            job.location.toLowerCase().includes(value.toLowerCase())
-        );
+        filterJobs(value, jobType);
 
-        setFilteredJobs(filtered);
+    };
+
+    const handleJobType = (e) => {
+
+        const value = e.target.value;
+
+        setJobType(value);
+
+        filterJobs(search, value);
 
     };
 
@@ -48,13 +74,35 @@ function Jobs() {
                 Available Jobs
             </h1>
 
-            <input
-                type="text"
-                placeholder="Search jobs..."
-                value={search}
-                onChange={handleSearch}
-                className="w-full border p-3 rounded-lg mb-6"
-            />
+            <div className="flex gap-4 mb-6">
+
+                <input
+                    type="text"
+                    placeholder="Search jobs..."
+                    value={search}
+                    onChange={handleSearch}
+                    className="flex-1 border p-3 rounded-lg"
+                />
+
+                <select
+                    value={jobType}
+                    onChange={handleJobType}
+                    className="border p-3 rounded"
+                >
+
+                    <option value="">All Jobs</option>
+
+                    <option value="Full Time">Full Time</option>
+
+                    <option value="Part Time">Part Time</option>
+
+                    <option value="Internship">Internship</option>
+
+                    <option value="Remote">Remote</option>
+
+                </select>
+
+            </div>
 
             {
                 filteredJobs.map((job) => (
