@@ -146,15 +146,22 @@ function ManageJobs() {
                                             {job.salary}
                                         </td>
 
-                                        <td className="p-4">
+                                        <td>
+
+                                            <Link
+                                                to={`/recruiter/applicants/${job._id}`}
+                                                className="bg-blue-500 text-white px-3 py-1 rounded mr-2"
+                                            >
+                                                Applicants
+                                            </Link>
+
                                             <button
-                                                onClick={() =>
-                                                    handleDelete(job._id)
-                                                }
-                                                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                                                onClick={() => handleDelete(job._id)}
+                                                className="bg-red-500 text-white px-3 py-1 rounded"
                                             >
                                                 Delete
                                             </button>
+
                                         </td>
                                     </tr>
 
