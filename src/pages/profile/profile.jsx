@@ -1,9 +1,18 @@
 import { useEffect, useState } from "react";
 import api from "../../services/api";
+import NavBar from "../../components/navBar";
 
 function Profile() {
 
     const [user, setUser] = useState(null);
+    const [editing, setEditing] = useState(false);
+
+    const [form, setForm] = useState({
+        bio: "",
+        skills: "",
+        education: "",
+        experience: ""
+    });
 
     useEffect(() => {
 
@@ -31,6 +40,52 @@ function Profile() {
 
             setUser(res.data);
 
+            setForm({
+                bio: res.data.bio || "",
+                skills: res.data.skills || "",
+                education: res.data.education || "",
+                experience: res.data.experience || ""
+            });
+
+        } catch (error) {
+
+            console.log(error);
+
+        }
+
+    };
+
+    const handleChange = (e) => {
+
+        setForm({
+            ...form,
+            [e.target.name]: e.target.value
+        });
+
+    };
+
+    const handleSave = async () => {
+
+        try {
+
+            const token =
+                localStorage.getItem("token");
+
+            await api.put(
+                "/users/profile",
+                form,
+                {
+                    headers: {
+                        Authorization:
+                            `Bearer ${token}`
+                    }
+                }
+            );
+
+            setEditing(false);
+            getProfile();
+            alert("Profile Updated");
+
         } catch (error) {
 
             console.log(error);
@@ -43,37 +98,148 @@ function Profile() {
         return <h2>Loading...</h2>;
 
     return (
+        <>
+            <NavBar />
 
-        <div className="max-w-4xl mx-auto mt-10">
+            <div className="max-w-4xl mx-auto mt-10">
 
-            <div className="bg-white p-6 shadow rounded">
+                <div className="bg-white p-6 shadow rounded">
 
-                <h1 className="text-3xl font-bold mb-4">
+                    <h1 className="text-3xl font-bold mb-4">
 
-                    Profile
+                        Profile
 
-                </h1>
+                    </h1>
 
-                <p>
-                    <strong>Name:</strong>
-                    {user.name}
-                </p>
+                    <p>
+                        <strong>Name: </strong>
+                        {user.name}
+                    </p>
 
-                <p>
-                    <strong>Email:</strong>
-                    {user.email}
-                </p>
+                    <p>
+                        <strong>Email: </strong>
+                        {user.email}
+                    </p>
 
-                <p>
-                    <strong>Bio:</strong>
-                    {user.bio}
-                </p>
+                    {editing ? (
+
+                        <div className="mt-4 space-y-4">
+
+                            <div>
+                                <label className="font-semibold block mb-1">
+                                    Bio
+                                </label>
+                                <textarea
+                                    name="bio"
+                                    value={form.bio}
+                                    onChange={handleChange}
+                                    className="w-full border p-3 rounded"
+                                    rows={3}
+                                />
+                            </div>
+
+                            <div>
+                                <label className="font-semibold block mb-1">
+                                    Skills
+                                </label>
+                                <input
+                                    name="skills"
+                                    value={form.skills}
+                                    onChange={handleChange}
+                                    className="w-full border p-3 rounded"
+                                    placeholder="e.g. React, Node.js, MongoDB"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="font-semibold block mb-1">
+                                    Education
+                                </label>
+                                <input
+                                    name="education"
+                                    value={form.education}
+                                    onChange={handleChange}
+                                    className="w-full border p-3 rounded"
+                                    placeholder="e.g. BSc in Computer Science"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="font-semibold block mb-1">
+                                    Experience
+                                </label>
+                                <textarea
+                                    name="experience"
+                                    value={form.experience}
+                                    onChange={handleChange}
+                                    className="w-full border p-3 rounded"
+                                    rows={3}
+                                    placeholder="e.g. 2 years at XYZ Company"
+                                />
+                            </div>
+
+                            <div className="flex gap-3">
+
+                                <button
+                                    onClick={handleSave}
+                                    className="bg-green-600 text-white px-5 py-2 rounded"
+                                >
+                                    Save
+                                </button>
+
+                                <button
+                                    onClick={() => setEditing(false)}
+                                    className="bg-gray-400 text-white px-5 py-2 rounded"
+                                >
+                                    Cancel
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    ) : (
+
+                        <div className="mt-4 space-y-2">
+
+                            <p>
+                                <strong>Bio: </strong>
+                                {user.bio || "Not set"}
+                            </p>
+
+                            <p>
+                                <strong>Skills: </strong>
+                                {user.skills || "Not set"}
+                            </p>
+
+                            <p>
+                                <strong>Education: </strong>
+                                {user.education || "Not set"}
+                            </p>
+
+                            <p>
+                                <strong>Experience: </strong>
+                                {user.experience || "Not set"}
+                            </p>
+
+                            <button
+                                onClick={() => setEditing(true)}
+                                className="bg-blue-600 text-white px-5 py-2 rounded mt-3"
+                            >
+                                Edit Profile
+                            </button>
+
+                        </div>
+
+                    )}
+
+                </div>
 
             </div>
 
-        </div>
+        </>
 
     );
 }
 
-export default Profile;
+export default Profile;
