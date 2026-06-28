@@ -222,6 +222,20 @@ function Profile() {
                                 {user.experience || "Not set"}
                             </p>
 
+                            {user.resume && (
+                                <p>
+                                    <strong>Resume: </strong>
+                                    <a
+                                        href={user.resume.startsWith("http") ? user.resume : `http://localhost:5000/${user.resume}`}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="text-blue-600 hover:underline"
+                                    >
+                                        View Resume
+                                    </a>
+                                </p>
+                            )}
+
                             <button
                                 onClick={() => setEditing(true)}
                                 className="bg-blue-600 text-white px-5 py-2 rounded mt-3"

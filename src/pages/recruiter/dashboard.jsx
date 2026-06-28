@@ -1,4 +1,5 @@
 import NavBar from "../../components/navBar";
+import StatCard from "../../components/StatCard";
 
 function Dashboard() {
 
@@ -16,35 +17,9 @@ function Dashboard() {
 
                 <div className="grid md:grid-cols-3 gap-6">
 
-                    <div className="bg-white shadow p-6 rounded">
-
-                        <h2>Total Jobs</h2>
-
-                        <p className="text-3xl font-bold">
-                            15
-                        </p>
-
-                    </div>
-
-                    <div className="bg-white shadow p-6 rounded">
-
-                        <h2>Total Applications</h2>
-
-                        <p className="text-3xl font-bold">
-                            120
-                        </p>
-
-                    </div>
-
-                    <div className="bg-white shadow p-6 rounded">
-
-                        <h2>Total Companies</h2>
-
-                        <p className="text-3xl font-bold">
-                            3
-                        </p>
-
-                    </div>
+                    <StatCard title="Jobs" value={12} />
+                    <StatCard title="Applications" value={48} />
+                    <StatCard title="Companies" value={3} />
 
                 </div>
 
