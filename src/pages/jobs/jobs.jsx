@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../../services/api";
-import { Link } from "react-router-dom";
+import JobCard from "../../components/JobCard";
 
 function Jobs() {
 
@@ -107,27 +107,7 @@ function Jobs() {
             {
                 filteredJobs.map((job) => (
 
-                    <div
-                        key={job._id}
-                        className="border p-4 rounded-lg mb-3"
-                    >
-
-                        <h2 className="text-xl font-bold">
-                            {job.title}
-                        </h2>
-
-                        <p>{job.location}</p>
-
-                        <p>Rs. {job.salary}</p>
-
-                        <Link
-                            to={`/jobs/${job._id}`}
-                            className="text-blue-600"
-                        >
-                            View Details
-                        </Link>
-
-                    </div>
+                    <JobCard key={job._id} job={job} />
 
                 ))
             }
