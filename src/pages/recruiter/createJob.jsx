@@ -11,36 +11,59 @@ function CreateJob() {
         salary: "",
         jobType: "",
         experienceLevel: "",
-        company: "",
+        company: ""
     });
 
     const handleChange = (e) => {
+
         setJob({
             ...job,
             [e.target.name]: e.target.value,
         });
+
     };
 
     const handleSubmit = async (e) => {
+
         e.preventDefault();
+
         try {
-            await api.post("/jobs/create", job);
-            alert("Job Created Successfully!");
+
+            const token =
+                localStorage.getItem("token");
+
+            await api.post(
+                "/jobs/create",
+                job,
+                {
+                    headers: {
+                        Authorization:
+                            `Bearer ${token}`
+                    }
+                }
+            );
+
+            alert("Job Created");
+
         } catch (error) {
-            alert(error.response?.data?.message || "Failed to create job");
+
             console.log(error);
+
         }
+
     };
 
     return (
         <>
             <NavBar />
 
-            <div className="max-w-4xl mx-auto mt-10 px-4">
+            <div className="max-w-4xl mx-auto mt-10">
+
                 <form
                     onSubmit={handleSubmit}
                     className="bg-white p-6 shadow rounded"
                 >
+
                     <h1 className="text-3xl font-bold mb-5">
                         Create Job
                     </h1>
@@ -49,59 +72,59 @@ function CreateJob() {
                         name="title"
                         placeholder="Job Title"
                         onChange={handleChange}
-                        className="w-full border p-3 mb-3 rounded"
+                        className="w-full border p-3 mb-3"
                     />
 
                     <textarea
                         name="description"
                         placeholder="Description"
                         onChange={handleChange}
-                        className="w-full border p-3 mb-3 rounded"
-                        rows={4}
+                        className="w-full border p-3 mb-3"
                     />
 
                     <input
                         name="location"
                         placeholder="Location"
                         onChange={handleChange}
-                        className="w-full border p-3 mb-3 rounded"
+                        className="w-full border p-3 mb-3"
                     />
 
                     <input
                         name="salary"
                         placeholder="Salary"
                         onChange={handleChange}
-                        className="w-full border p-3 mb-3 rounded"
+                        className="w-full border p-3 mb-3"
                     />
 
                     <input
                         name="jobType"
-                        placeholder="Full Time / Part Time"
+                        placeholder="Full Time"
                         onChange={handleChange}
-                        className="w-full border p-3 mb-3 rounded"
+                        className="w-full border p-3 mb-3"
                     />
 
                     <input
                         name="experienceLevel"
-                        placeholder="Junior / Senior"
+                        placeholder="Junior"
                         onChange={handleChange}
-                        className="w-full border p-3 mb-3 rounded"
+                        className="w-full border p-3 mb-3"
                     />
 
                     <input
                         name="company"
                         placeholder="Company ID"
                         onChange={handleChange}
-                        className="w-full border p-3 mb-3 rounded"
+                        className="w-full border p-3 mb-3"
                     />
 
                     <button
-                        type="submit"
                         className="bg-green-600 text-white px-5 py-3 rounded"
                     >
                         Create Job
                     </button>
+
                 </form>
+
             </div>
         </>
     );

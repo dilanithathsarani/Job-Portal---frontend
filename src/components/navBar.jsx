@@ -40,6 +40,27 @@ function Navbar() {
                                 Applied Jobs
                             </Link>
 
+                            <Link
+                                to="/recruiter/dashboard"
+                                className="hover:text-gray-200"
+                            >
+                                Dashboard
+                            </Link>
+
+                            <Link
+                                to="/recruiter/create-job"
+                                className="hover:text-gray-200"
+                            >
+                                Create Job
+                            </Link>
+
+                            <Link
+                                to="/recruiter/manage-jobs"
+                                className="hover:text-gray-200"
+                            >
+                                Manage Jobs
+                            </Link>
+
                             <button
                                 onClick={logout}
                                 className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded"

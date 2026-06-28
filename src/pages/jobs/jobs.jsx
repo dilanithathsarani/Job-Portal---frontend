@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../../services/api";
+import { Link } from "react-router-dom";
 
 function Jobs() {
 
@@ -11,8 +12,12 @@ function Jobs() {
 
     const fetchJobs = async () => {
         try {
-            const res = await api.get("/jobs");
+
+            const res =
+                await api.get("/jobs");
+
             setJobs(res.data);
+
         } catch (error) {
             console.log(error);
         }
@@ -25,22 +30,33 @@ function Jobs() {
                 Available Jobs
             </h1>
 
-            {jobs.length === 0 && (
-                <p className="text-gray-500">No jobs found. Check back later!</p>
-            )}
+            {
+                jobs.map((job) => (
 
-            {jobs.map((job) => (
-                <div
-                    key={job._id}
-                    className="border p-4 rounded-lg mb-3"
-                >
-                    <h2 className="text-xl font-bold">
-                        {job.title}
-                    </h2>
-                    <p>{job.location}</p>
-                    <p>Rs. {job.salary}</p>
-                </div>
-            ))}
+                    <div
+                        key={job._id}
+                        className="border p-4 rounded-lg mb-3"
+                    >
+
+                        <h2 className="text-xl font-bold">
+                            {job.title}
+                        </h2>
+
+                        <p>{job.location}</p>
+
+                        <p>Rs. {job.salary}</p>
+
+                        <Link
+                            to={`/jobs/${job._id}`}
+                            className="text-blue-600"
+                        >
+                            View Details
+                        </Link>
+
+                    </div>
+
+                ))
+            }
 
         </div>
     );
