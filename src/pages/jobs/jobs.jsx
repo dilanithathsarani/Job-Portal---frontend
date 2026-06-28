@@ -104,13 +104,21 @@ function Jobs() {
 
             </div>
 
-            {
+            {filteredJobs.length === 0 ? (
+
+                <p className="text-center mt-10 text-gray-500">
+
+                    No jobs found.
+
+                </p>
+
+            ) : (
+
                 filteredJobs.map((job) => (
-
                     <JobCard key={job._id} job={job} />
-
                 ))
-            }
+
+            )}
 
         </div>
     );
