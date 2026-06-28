@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 function Jobs() {
 
     const [jobs, setJobs] = useState([]);
+    const [filteredJobs, setFilteredJobs] = useState([]);
+    const [search, setSearch] = useState("");
 
     useEffect(() => {
         fetchJobs();
@@ -17,10 +19,26 @@ function Jobs() {
                 await api.get("/jobs");
 
             setJobs(res.data);
+            setFilteredJobs(res.data);
 
         } catch (error) {
             console.log(error);
         }
+    };
+
+    const handleSearch = (e) => {
+
+        const value = e.target.value;
+
+        setSearch(value);
+
+        const filtered = jobs.filter((job) =>
+            job.title.toLowerCase().includes(value.toLowerCase()) ||
+            job.location.toLowerCase().includes(value.toLowerCase())
+        );
+
+        setFilteredJobs(filtered);
+
     };
 
     return (
@@ -30,8 +48,16 @@ function Jobs() {
                 Available Jobs
             </h1>
 
+            <input
+                type="text"
+                placeholder="Search jobs..."
+                value={search}
+                onChange={handleSearch}
+                className="w-full border p-3 rounded-lg mb-6"
+            />
+
             {
-                jobs.map((job) => (
+                filteredJobs.map((job) => (
 
                     <div
                         key={job._id}
