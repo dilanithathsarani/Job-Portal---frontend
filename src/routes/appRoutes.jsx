@@ -15,6 +15,7 @@ import ViewApplicants from "../pages/recruiter/ViewApplicants.jsx";
 import AdminDashboard from "../pages/admin/Dashboard.jsx";
 import ManageUsers from "../pages/admin/ManageUsers.jsx";
 import AdminManageJobs from "../pages/admin/ManageJobs.jsx";
+import NotFound from "../pages/NotFound.jsx";
 
 function AppRoutes() {
     return (
@@ -113,6 +114,8 @@ function AppRoutes() {
                         </ProtectedRoute>
                     }
                 />
+
+                <Route path="*" element={<NotFound />} />
 
             </Routes>
         </BrowserRouter>
