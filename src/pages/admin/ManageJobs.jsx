@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import NavBar from "../../components/navBar";
 import api from "../../services/api";
+import { confirmToast } from "../../utils/confirmToast";
 
 function ManageJobs() {
 
@@ -65,7 +66,10 @@ function ManageJobs() {
 
     const handleDelete = async (id) => {
 
-        if (!window.confirm("Are you sure you want to delete this job?")) return;
+        const confirmed = await confirmToast(
+            "Are you sure you want to delete this job?"
+        );
+        if (!confirmed) return;
 
         try {
 
