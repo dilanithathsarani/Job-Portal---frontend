@@ -68,3 +68,31 @@
 .animate-home-progress {
     animation: homeProgress 1.2s ease-out both;
 }
+
+@keyframes authRise {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes authFloat {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-12px) rotate(2deg);
+    }
+}
+
+.animate-auth-rise {
+    animation: authRise 0.75s ease-out both;
+}
+
+.animate-auth-float {
+    animation: authFloat 5.5s ease-in-out infinite;
+}
