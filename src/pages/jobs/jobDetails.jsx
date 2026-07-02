@@ -9,16 +9,21 @@ function JobDetails() {
     const { id } = useParams();
 
     const [job, setJob] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
     useEffect(() => {
 
         fetchJob();
 
-    }, []);
+    }, [id]);
 
     const fetchJob = async () => {
 
         try {
+
+            setLoading(true);
+            setError("");
 
             const res =
                 await api.get(`/jobs/${id}`);
@@ -27,7 +32,19 @@ function JobDetails() {
 
         } catch (error) {
 
-            console.log(error);
+            console.error("Error fetching job:", error);
+            setError(
+                error.response?.data?.message ||
+                "Failed to load job details"
+            );
+            toast.error(
+                error.response?.data?.message ||
+                "Failed to load job details"
+            );
+
+        } finally {
+
+            setLoading(false);
 
         }
 
@@ -64,8 +81,21 @@ function JobDetails() {
 
     };
 
-    if (!job) {
-        return <h1>Loading...</h1>;
+    if (loading) {
+        return <h1 className="p-6 text-center">Loading...</h1>;
+    }
+
+    if (error || !job) {
+        return (
+            <>
+                <NavBar />
+                <div className="max-w-5xl mx-auto p-6 text-center">
+                    <p className="text-red-600 mb-4">
+                        {error || "Job not found"}
+                    </p>
+                </div>
+            </>
+        );
     }
 
     return (
