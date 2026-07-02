@@ -19,6 +19,8 @@ function Jobs() {
     // Saved Jobs state
     const [savedJobIds, setSavedJobIds] = useState(new Set());
 
+    const hasActiveFilters = search.trim() !== "" || jobType !== "";
+
     useEffect(() => {
 
         fetchSavedJobs();
@@ -29,7 +31,7 @@ function Jobs() {
 
         fetchJobs();
 
-    }, [currentPage]);
+    }, [currentPage, search, jobType]);
 
     const fetchSavedJobs = async () => {
 
@@ -69,8 +71,12 @@ function Jobs() {
 
         try {
 
+            const shouldFetchAllJobs = hasActiveFilters;
+
             const res = await api.get(
-                `/jobs?page=${currentPage}&limit=10`
+                shouldFetchAllJobs
+                    ? "/jobs"
+                    : `/jobs?page=${currentPage}&limit=10`
             );
 
             // Handle robust pagination response or simple array fallback
@@ -89,7 +95,7 @@ function Jobs() {
             }
 
             setJobs(jobsData);
-            setTotalPages(total);
+            setTotalPages(shouldFetchAllJobs ? 1 : total);
 
             // Filter jobs immediately using any active search/type filter
             applyFilters(jobsData, search, jobType);
@@ -106,17 +112,40 @@ function Jobs() {
 
     };
 
+    const normalize = (value) =>
+        String(value ?? "").trim().toLowerCase();
+
+    const getCompanyName = (company) => {
+
+        if (typeof company === "string") return company;
+        return company?.name ?? "";
+
+    };
+
+    const normalizeJobType = (value) =>
+        normalize(value).replace(/[^a-z0-9]/g, "");
+
     const applyFilters = (jobsList, searchValue, typeValue) => {
+
+        const normalizedSearch = normalize(searchValue);
+        const normalizedType = normalizeJobType(typeValue);
 
         const filtered = jobsList.filter((job) => {
 
+            const searchableText = [
+                job.title,
+                job.location,
+                job.description,
+                getCompanyName(job.company),
+            ].map(normalize).join(" ");
+
             const searchMatch =
-                job.title.toLowerCase().includes(searchValue.toLowerCase()) ||
-                job.location.toLowerCase().includes(searchValue.toLowerCase());
+                normalizedSearch === "" ||
+                searchableText.includes(normalizedSearch);
 
             const typeMatch =
-                typeValue === "" ||
-                job.jobType === typeValue;
+                normalizedType === "" ||
+                normalizeJobType(job.jobType) === normalizedType;
 
             return searchMatch && typeMatch;
 
