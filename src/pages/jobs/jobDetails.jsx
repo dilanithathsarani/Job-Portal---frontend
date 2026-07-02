@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 import api from "../../services/api";
 import NavBar from "../../components/navBar";
 
@@ -50,11 +51,11 @@ function JobDetails() {
                 }
             );
 
-            alert("Applied Successfully!");
+            toast.success("Applied Successfully!");
 
         } catch (error) {
 
-            alert(
+            toast.error(
                 error.response?.data?.message ||
                 "Application Failed"
             );

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import api from "../../services/api";
 import NavBar from "../../components/navBar";
 
@@ -84,11 +85,12 @@ function Profile() {
 
             setEditing(false);
             getProfile();
-            alert("Profile Updated");
+            toast.success("Profile Updated");
 
         } catch (error) {
 
             console.log(error);
+            toast.error("Failed to update profile");
 
         }
 
@@ -256,4 +258,4 @@ function Profile() {
     );
 }
 
-export default Profile;
+export default Profile;

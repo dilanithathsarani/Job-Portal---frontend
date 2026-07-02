@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import NavBar from "../../components/navBar";
 import api from "../../services/api";
 
@@ -65,11 +66,12 @@ function ManageJobs() {
                 jobs.filter((job) => job._id !== id)
             );
 
-            alert("Job Deleted");
+            toast.success("Job Deleted");
 
         } catch (error) {
 
             console.log(error);
+            toast.error("Failed to delete job");
 
         }
 

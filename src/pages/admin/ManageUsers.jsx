@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import NavBar from "../../components/navBar";
 import api from "../../services/api";
 
@@ -85,12 +86,12 @@ function ManageUsers() {
                 )
             );
 
-            alert("User Deleted Successfully");
+            toast.success("User Deleted Successfully");
 
         } catch (error) {
 
             console.error("Error deleting user:", error);
-            alert("Failed to delete user");
+            toast.error("Failed to delete user");
 
         }
 
@@ -123,12 +124,12 @@ function ManageUsers() {
                 )
             );
 
-            alert("User role updated successfully");
+            toast.success("User role updated successfully");
 
         } catch (error) {
 
             console.error("Error updating user role:", error);
-            alert("Failed to update user role");
+            toast.error("Failed to update user role");
 
         }
 

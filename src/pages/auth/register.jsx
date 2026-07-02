@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
 import api from "../../services/api";
 
 function Register() {
@@ -29,7 +30,7 @@ function Register() {
         e.preventDefault();
 
         if (!formData.name || !formData.email || !formData.password) {
-            alert("Please fill all required fields");
+            toast.error("Please fill all required fields");
             return;
         }
 
@@ -42,13 +43,13 @@ function Register() {
                 formData
             );
 
-            alert("Registration Successful");
+            toast.success("Registration Successful");
             navigate("/login");
 
         } catch (error) {
 
             console.error("Registration error:", error);
-            alert(
+            toast.error(
                 error.response?.data?.message ||
                 "Registration Failed"
             );

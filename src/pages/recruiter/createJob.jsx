@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import NavBar from "../../components/navBar";
 import api from "../../services/api";
 
@@ -43,11 +44,12 @@ function CreateJob() {
                 }
             );
 
-            alert("Job Created");
+            toast.success("Job Created");
 
         } catch (error) {
 
             console.log(error);
+            toast.error("Failed to create job");
 
         }
 
