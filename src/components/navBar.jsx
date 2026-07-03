@@ -65,6 +65,10 @@ function Navbar() {
                         Jobs
                     </Link>
 
+                    <Link to="/ai/interview">
+    AI Interview
+</Link>
+
                     {token ? (
                         <>
                             <NotificationBell />

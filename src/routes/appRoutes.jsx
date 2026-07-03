@@ -16,6 +16,7 @@ import AdminDashboard from "../pages/admin/Dashboard.jsx";
 import ManageUsers from "../pages/admin/ManageUsers.jsx";
 import AdminManageJobs from "../pages/admin/ManageJobs.jsx";
 import NotFound from "../pages/NotFound.jsx";
+import InterviewGenerator from "../pages/ai/InterviewGenerator.jsx";
 
 function AppRoutes() {
     return (
@@ -114,6 +115,11 @@ function AppRoutes() {
                         </ProtectedRoute>
                     }
                 />
+
+                <Route
+    path="/ai/interview"
+    element={<InterviewGenerator />}
+/>
 
                 <Route path="*" element={<NotFound />} />
 
