@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import NavBar from "../components/navBar";
 import heroImage from "../assets/job-hero-hq.png";
-import Footer from "../components/footer";
+import Footer from "../components/Footer";
 
 function Home() {
     const stats = [

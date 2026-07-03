@@ -18,6 +18,7 @@ import AdminManageJobs from "../pages/admin/ManageJobs.jsx";
 import NotFound from "../pages/NotFound.jsx";
 import InterviewGenerator from "../pages/ai/InterviewGenerator.jsx";
 import ResumeAnalyzer from "../pages/ai/ResumeAnalyzer.jsx";
+import CoverLetter from "../pages/ai/CoverLatter.jsx";
 
 function AppRoutes() {
   return (
@@ -105,6 +106,8 @@ function AppRoutes() {
         <Route path="/ai/interview" element={<InterviewGenerator />} />
 
         <Route path="/ai/resume-analyzer" element={<ResumeAnalyzer />} />
+
+        <Route path="/ai/cover-letter" element={<CoverLetter />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

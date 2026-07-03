@@ -55,6 +55,8 @@ function Navbar() {
 
           <Link to="/ai/resume-analyzer">AI Resume Analyzer</Link>
 
+          <Link to="/ai/cover-letter">AI Cover Letter</Link>
+
           {token ? (
             <>
               <NotificationBell />
