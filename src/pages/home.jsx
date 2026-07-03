@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import NavBar from "../components/navBar";
 import heroImage from "../assets/job-hero-hq.png";
+import Footer from "../components/footer";
 
 function Home() {
     const stats = [
@@ -209,6 +210,7 @@ function Home() {
                     </div>
                 </section>
             </main>
+            <Footer/>
         </>
     );
 }
