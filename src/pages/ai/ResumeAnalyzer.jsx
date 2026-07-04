@@ -1,6 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import api from "../../services/api";
+import Navbar from "../../components/navBar";
 
 function ResumeAnalyzer() {
 
@@ -66,6 +67,9 @@ function ResumeAnalyzer() {
 
     return (
 
+        <>
+        <Navbar/>
+
         <div className="max-w-5xl mx-auto mt-10">
 
             <h1 className="text-3xl font-bold mb-6">
@@ -111,6 +115,7 @@ function ResumeAnalyzer() {
 
         </div>
 
+        </>
     );
 
 }

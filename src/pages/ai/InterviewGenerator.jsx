@@ -1,5 +1,6 @@
 import { useState } from "react";
 import api from "../../services/api";
+import Navbar from "../../components/navBar";
 
 function InterviewGenerator() {
 
@@ -37,6 +38,9 @@ function InterviewGenerator() {
     };
 
     return (
+        <>
+        
+        <Navbar/>
 
         <div className="max-w-4xl mx-auto mt-10">
 
@@ -69,6 +73,8 @@ function InterviewGenerator() {
             />
 
         </div>
+
+        </>
 
     );
 
