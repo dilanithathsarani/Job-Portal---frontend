@@ -20,6 +20,7 @@ import InterviewGenerator from "../pages/ai/InterviewGenerator.jsx";
 import ResumeAnalyzer from "../pages/ai/ResumeAnalyzer.jsx";
 import CoverLetter from "../pages/ai/CoverLatter.jsx";
 import CareerAdvisor from "../pages/ai/CareerAdvisor.jsx";
+import JobRecommendation from "../pages/ai/JobRecommendation.jsx";
 
 function AppRoutes() {
   return (
@@ -111,6 +112,8 @@ function AppRoutes() {
         <Route path="/ai/cover-letter" element={<CoverLetter />} />
 
         <Route path="/ai/career-advisor" element={<CareerAdvisor />} />
+
+        <Route path="/ai/recommendations" element={<JobRecommendation />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
