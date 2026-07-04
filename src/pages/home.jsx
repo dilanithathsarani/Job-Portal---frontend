@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import NavBar from "../components/navBar";
-import heroImage from "../assets/job-hero-hq.png";
+import heroImage from "../assets/home.png";
 import Footer from "../components/Footer";
 
 function Home() {
@@ -108,7 +108,7 @@ function Home() {
                                     <img
                                         src={heroImage}
                                         alt="Layered platform graphic"
-                                        className="mx-auto w-52 animate-home-pulse object-contain drop-shadow-2xl sm:w-full"
+                                        className="mx-auto w-100 animate-home-pulse object-contain drop-shadow-2xl sm:w-full"
                                     />
 
                                     <div className="space-y-3">
