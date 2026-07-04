@@ -19,6 +19,7 @@ import NotFound from "../pages/NotFound.jsx";
 import InterviewGenerator from "../pages/ai/InterviewGenerator.jsx";
 import ResumeAnalyzer from "../pages/ai/ResumeAnalyzer.jsx";
 import CoverLetter from "../pages/ai/CoverLatter.jsx";
+import CareerAdvisor from "../pages/ai/CareerAdvisor.jsx";
 
 function AppRoutes() {
   return (
@@ -108,6 +109,8 @@ function AppRoutes() {
         <Route path="/ai/resume-analyzer" element={<ResumeAnalyzer />} />
 
         <Route path="/ai/cover-letter" element={<CoverLetter />} />
+
+        <Route path="/ai/career-advisor" element={<CareerAdvisor />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

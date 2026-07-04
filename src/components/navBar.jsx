@@ -57,6 +57,8 @@ function Navbar() {
 
           <Link to="/ai/cover-letter">AI Cover Letter</Link>
 
+          <Link to="/ai/career-advisor">AI Career Advisor</Link>
+
           {token ? (
             <>
               <NotificationBell />
