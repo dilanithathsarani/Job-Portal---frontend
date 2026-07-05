@@ -7,7 +7,6 @@ import Profile from "../pages/profile/profile.jsx";
 import ProtectedRoute from "../components/protectedRoute.jsx";
 import AppliedJobs from "../pages/jobs/appliedJobs.jsx";
 import JobDetails from "../pages/jobs/jobDetails.jsx";
-import Dashboard from "../pages/recruiter/dashboard.jsx";
 import CreateCompany from "../pages/recruiter/createCompany.jsx";
 import CreateJob from "../pages/recruiter/createJob.jsx";
 import ManageJobs from "../pages/recruiter/ManageJobs.jsx";
@@ -21,6 +20,7 @@ import ResumeAnalyzer from "../pages/ai/ResumeAnalyzer.jsx";
 import CoverLetter from "../pages/ai/CoverLatter.jsx";
 import CareerAdvisor from "../pages/ai/CareerAdvisor.jsx";
 import JobRecommendation from "../pages/ai/JobRecommendation.jsx";
+import RecruiterDashboard from "../pages/recruiter/RecruiterDashboard.jsx";
 
 function AppRoutes() {
   return (
@@ -58,7 +58,7 @@ function AppRoutes() {
           path="/recruiter/dashboard"
           element={
             <ProtectedRoute>
-              <Dashboard />
+              <RecruiterDashboard />
             </ProtectedRoute>
           }
         />
