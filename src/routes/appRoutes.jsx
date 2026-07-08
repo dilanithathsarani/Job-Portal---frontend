@@ -23,7 +23,7 @@ import JobRecommendation from "../pages/ai/JobRecommendation.jsx";
 import RecruiterDashboard from "../pages/recruiter/RecruiterDashboard.jsx";
 import AdminRoute from "./AdminRoute.jsx";
 import Dashboard from "../pages/admin/Dashboard.jsx";
-
+import ManageApplications from "../pages/admin/ManageApplications.jsx";
 
 function AppRoutes() {
   return (
@@ -85,6 +85,7 @@ function AppRoutes() {
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/jobs" element={<AdminManageJobs />} />
           <Route path="/admin/users" element={<ManageUsers />} />
+          <Route path="/admin/applications" element={<ManageApplications />} />
         </Route>
 
         <Route
