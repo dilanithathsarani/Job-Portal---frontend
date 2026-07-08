@@ -21,6 +21,9 @@ import CoverLetter from "../pages/ai/CoverLatter.jsx";
 import CareerAdvisor from "../pages/ai/CareerAdvisor.jsx";
 import JobRecommendation from "../pages/ai/JobRecommendation.jsx";
 import RecruiterDashboard from "../pages/recruiter/RecruiterDashboard.jsx";
+import AdminRoute from "./AdminRoute.jsx";
+import Dashboard from "../pages/admin/Dashboard.jsx";
+
 
 function AppRoutes() {
   return (
@@ -78,14 +81,11 @@ function AppRoutes() {
           }
         />
 
-        <Route
-          path="/admin/dashboard"
-          element={
-            <ProtectedRoute>
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
+        <Route element={<AdminRoute />}>
+          <Route path="/admin/dashboard" element={<Dashboard />} />
+          <Route path="/admin/jobs" element={<ManageJobs />} />
+          <Route path="/admin/users" element={<ManageUsers />} />
+        </Route>
 
         <Route
           path="/admin/users"

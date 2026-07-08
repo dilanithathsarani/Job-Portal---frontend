@@ -1,9 +1,10 @@
-import NavBar from "../../components/navBar";
+import React from "react";
+import AdminSidebar from "../../components/admin/AdminSidebar";
 
 function Dashboard() {
   return (
     <>
-      <NavBar />
+      <AdminSidebar />
 
       <div className="max-w-7xl mx-auto mt-10">
 

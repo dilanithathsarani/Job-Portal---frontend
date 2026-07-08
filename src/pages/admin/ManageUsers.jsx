@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import NavBar from "../../components/navBar";
 import api from "../../services/api";
 import { confirmToast } from "../../utils/confirmToast";
+import AdminSidebar from "../../components/admin/AdminSidebar";
 
 function ManageUsers() {
 
@@ -141,7 +141,7 @@ function ManageUsers() {
 
     return (
         <>
-            <NavBar />
+            <AdminSidebar />
 
             <div className="max-w-7xl mx-auto p-6">
 
