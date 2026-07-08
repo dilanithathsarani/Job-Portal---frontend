@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Briefcase, MapPin, Building2, Trash2 } from "lucide-react";
+import { Eye, X } from "lucide-react";
 
 import api from "../../services/api";
 import { confirmToast } from "../../utils/confirmToast";
@@ -11,6 +12,7 @@ function ManageJobs() {
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  const [selectedJob, setSelectedJob] = useState(null);
 
   useEffect(() => {
     fetchJobs();
@@ -373,24 +375,142 @@ function ManageJobs() {
                                         text-center
                                     "
                     >
-                      <button
-                        onClick={() => handleDelete(job._id)}
-                        className="
-                                            bg-red-500
-                                            text-white
-                                            p-3
-                                            rounded-xl
-                                            hover:bg-red-600
-                                            transition
-                                        "
-                      >
-                        <Trash2 size={18} />
-                      </button>
+                      <td className="p-4">
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => setSelectedJob(job)}
+                            className="
+bg-blue-600
+text-white
+px-4
+py-2
+rounded-lg
+flex
+items-center
+gap-2
+"
+                          >
+                            <Eye size={18} />
+                            View
+                          </button>
+
+                          <button
+                            onClick={() => handleDelete(job._id)}
+                            className="
+bg-red-500
+text-white
+px-4
+py-2
+rounded-lg
+"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+        )}
+
+        {selectedJob && (
+          <div
+            className="
+fixed
+inset-0
+bg-black/50
+flex
+items-center
+justify-center
+z-50
+"
+          >
+            <div
+              className="
+bg-white
+rounded-2xl
+p-6
+w-full
+max-w-xl
+relative
+shadow-xl
+"
+            >
+              <button
+                onClick={() => setSelectedJob(null)}
+                className="
+absolute
+right-5
+top-5
+text-gray-500
+"
+              >
+                <X size={24} />
+              </button>
+
+              <h2
+                className="
+text-2xl
+font-bold
+mb-6
+"
+              >
+                Job Details
+              </h2>
+
+              <div
+                className="
+space-y-3
+text-gray-700
+"
+              >
+                <p>
+                  <b>Title:</b> {selectedJob.title}
+                </p>
+
+                <p>
+                  <b>Company:</b> {selectedJob.company?.name || "N/A"}
+                </p>
+
+                <p>
+                  <b>Location:</b> {selectedJob.location}
+                </p>
+
+                <p>
+                  <b>Salary:</b> Rs. {selectedJob.salary}
+                </p>
+
+                <p>
+                  <b>Job Type:</b> {selectedJob.jobType}
+                </p>
+
+                <p>
+                  <b>Experience Level:</b> {selectedJob.experienceLevel}
+                </p>
+
+                <p>
+                  <b>Description:</b>
+                </p>
+
+                <p
+                  className="
+bg-gray-100
+rounded-lg
+p-3
+"
+                >
+                  {selectedJob.description}
+                </p>
+
+                <p>
+                  <b>Required Skills:</b>{" "}
+                  {selectedJob.skillsRequired?.join(", ") || "N/A"}
+                </p>
+              </div>
+            </div>
           </div>
         )}
       </main>
