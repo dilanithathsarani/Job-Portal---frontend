@@ -1,4 +1,7 @@
 import React from "react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import {
   Users,
   UserRoundCheck,
@@ -9,42 +12,123 @@ import {
 } from "lucide-react";
 
 import AdminSidebar from "../../components/admin/AdminSidebar";
+import api from "../../services/api";
 
 
 function Dashboard() {
 
+   const navigate = useNavigate();
 
-  const cards = [
 
-    {
-      title:"Total Users",
-      value:"0",
-      icon:<Users size={32}/>,
-      color:"from-blue-500 to-blue-700"
-    },
+    const [stats, setStats] = useState({
 
-    {
-      title:"Total Employers",
-      value:"0",
-      icon:<UserRoundCheck size={32}/>,
-      color:"from-green-500 to-green-700"
-    },
+        totalUsers:0,
 
-    {
-      title:"Total Jobs",
-      value:"0",
-      icon:<Briefcase size={32}/>,
-      color:"from-purple-500 to-purple-700"
-    },
+        totalEmployers:0,
 
-    {
-      title:"Applications",
-      value:"0",
-      icon:<FileText size={32}/>,
-      color:"from-orange-500 to-orange-700"
-    }
+        totalJobs:0,
 
-  ];
+        totalApplications:0
+
+    });
+
+
+    const [loading,setLoading] = useState(true);
+
+
+
+
+    useEffect(()=>{
+
+        fetchDashboard();
+
+    },[]);
+
+
+
+
+
+    const fetchDashboard = async()=>{
+
+
+        try{
+
+
+            const res =
+            await api.get(
+                "/admin/dashboard"
+            );
+
+
+            setStats(
+                res.data.data
+            );
+
+
+        }
+        catch(error){
+
+
+            console.error(error);
+
+
+            toast.error(
+                "Failed to load dashboard"
+            );
+
+
+        }
+        finally{
+
+
+            setLoading(false);
+
+
+        }
+
+
+    };
+
+
+
+
+
+
+
+    const cards = [
+
+        {
+            title:"Total Users",
+            value:stats.totalUsers,
+            icon:<Users size={30}/>,
+            color:"bg-blue-500"
+        },
+
+
+        {
+            title:"Total Employers",
+            value:stats.totalEmployers,
+            icon:<UserRoundCheck size={30}/>,
+            color:"bg-green-500"
+        },
+
+
+        {
+            title:"Total Jobs",
+            value:stats.totalJobs,
+            icon:<Briefcase size={30}/>,
+            color:"bg-purple-500"
+        },
+
+
+        {
+            title:"Applications",
+            value:stats.totalApplications,
+            icon:<FileText size={30}/>,
+            color:"bg-orange-500"
+        }
+
+    ];
 
 
 
@@ -290,7 +374,9 @@ function Dashboard() {
             <div className="space-y-3">
 
 
-              <button className="
+              <button
+              onClick={() => navigate("/admin/users")}
+              className="
                 w-full
                 border
                 rounded-xl
@@ -302,7 +388,9 @@ function Dashboard() {
               </button>
 
 
-              <button className="
+              <button 
+              onClick={() => navigate("/admin/jobs")}
+              className="
                 w-full
                 border
                 rounded-xl
@@ -314,7 +402,9 @@ function Dashboard() {
               </button>
 
 
-              <button className="
+              <button 
+              onClick={() => navigate("/admin/applications")}
+              className="
                 w-full
                 border
                 rounded-xl

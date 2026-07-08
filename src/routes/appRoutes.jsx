@@ -83,7 +83,7 @@ function AppRoutes() {
 
         <Route element={<AdminRoute />}>
           <Route path="/admin/dashboard" element={<Dashboard />} />
-          <Route path="/admin/jobs" element={<ManageJobs />} />
+          <Route path="/admin/jobs" element={<AdminManageJobs />} />
           <Route path="/admin/users" element={<ManageUsers />} />
         </Route>
 
