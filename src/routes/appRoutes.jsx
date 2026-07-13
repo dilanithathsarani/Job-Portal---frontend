@@ -24,6 +24,8 @@ import RecruiterDashboard from "../pages/recruiter/RecruiterDashboard.jsx";
 import AdminRoute from "./AdminRoute.jsx";
 import Dashboard from "../pages/admin/Dashboard.jsx";
 import ManageApplications from "../pages/admin/ManageApplications.jsx";
+import RecruiterProfile from "../pages/recruiter/Profile.jsx";
+import EditProfile from "../pages/recruiter/EditProfile.jsx";
 
 function AppRoutes() {
   return (
@@ -60,23 +62,62 @@ function AppRoutes() {
         <Route
           path="/recruiter/dashboard"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["recruiter"]}>
               <RecruiterDashboard />
             </ProtectedRoute>
           }
         />
 
-        <Route path="/recruiter/company" element={<CreateCompany />} />
+        <Route
+          path="/recruiter/company"
+          element={
+            <ProtectedRoute allowedRoles={["recruiter"]}>
+              <CreateCompany />
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/recruiter/create-job" element={<CreateJob />} />
+        <Route
+          path="/recruiter/create-job"
+          element={
+            <ProtectedRoute allowedRoles={["recruiter"]}>
+              <CreateJob />
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/recruiter/manage-jobs" element={<ManageJobs />} />
+        <Route
+          path="/recruiter/manage-jobs"
+          element={
+            <ProtectedRoute allowedRoles={["recruiter"]}>
+              <ManageJobs />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/recruiter/applicants/:jobId"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["recruiter"]}>
               <ViewApplicants />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/recruiter/profile"
+          element={
+            <ProtectedRoute allowedRoles={["recruiter"]}>
+              <RecruiterProfile />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/recruiter/edit-profile"
+          element={
+            <ProtectedRoute allowedRoles={["recruiter"]}>
+              <EditProfile />
             </ProtectedRoute>
           }
         />
