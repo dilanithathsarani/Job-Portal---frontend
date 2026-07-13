@@ -5,6 +5,7 @@ import {
 } from "../../services/recruiterService";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import RecruiterSideBar from "../../components/recruiter/RecruiterSideBar";
 
 function EditProfile() {
   const navigate = useNavigate();
@@ -76,7 +77,15 @@ function EditProfile() {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6">
+    <>
+      
+    <div className="flex min-h-screen bg-gray-100">
+
+        <RecruiterSideBar />
+
+        <div className="flex-1 p-25">
+
+            <div className="max-w-3xl bg-white rounded-lg shadow p-6">
       <h1 className="text-2xl font-bold mb-5">Edit Recruiter Profile</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -136,7 +145,11 @@ function EditProfile() {
         </button>
       </form>
     </div>
+    </div>
+    </div>
+    </>
   );
 }
+ 
 
 export default EditProfile;

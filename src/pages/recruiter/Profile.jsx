@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getRecruiterProfile } from "../../services/recruiterService";
 import { Link, useLocation } from "react-router-dom";
+import RecruiterSideBar from "../../components/recruiter/RecruiterSideBar";
 
 function Profile() {
   const [profile, setProfile] = useState(null);
@@ -25,7 +26,15 @@ function Profile() {
   }
 
   return (
-    <div className="p-6">
+    <>
+      
+    <div className="flex min-h-screen bg-gray-100">
+
+        <RecruiterSideBar />
+
+        <div className="flex-1 p-25">
+
+            <div className="max-w-3xl bg-white rounded-lg shadow p-6">
       <h1 className="text-2xl font-bold">Recruiter Profile</h1>
 
       <div className="mt-5 space-y-3">
@@ -65,6 +74,9 @@ function Profile() {
         Edit Profile
       </Link>
     </div>
+    </div>
+    </div>
+    </>
   );
 }
 

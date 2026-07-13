@@ -1,111 +1,89 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
-import NavBar from "../../components/navBar";
+import RecruiterSideBar from "../../components/recruiter/RecruiterSideBar";
 import api from "../../services/api";
 
 function CreateCompany() {
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    website: "",
+    location: "",
+  });
 
-    const [formData, setFormData] = useState({
-        name: "",
-        description: "",
-        website: "",
-        location: "",
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
     });
+  };
 
-    const handleChange = (e) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
+    try {
+      const token = localStorage.getItem("token");
 
-    };
+      await api.post("/company/create", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    const handleSubmit = async (e) => {
+      toast.success("Company Created");
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to create company");
+    }
+  };
 
-        e.preventDefault();
+  return (
+    <>
+      <div className="flex min-h-screen bg-gray-100">
+        <RecruiterSideBar />
 
-        try {
+        <div className="flex-1 p-25">
+          
 
-            const token =
-                localStorage.getItem("token");
+          <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow">
+            <h1 className="text-3xl font-bold mb-6">Create Company</h1>
 
-            await api.post(
-                "/company/create",
-                formData,
-                {
-                    headers: {
-                        Authorization:
-                            `Bearer ${token}`
-                    }
-                }
-            );
+            <input
+              name="name"
+              placeholder="Company Name"
+              onChange={handleChange}
+              className="w-full border p-3 mb-3"
+            />
 
-            toast.success("Company Created");
+            <textarea
+              name="description"
+              placeholder="Description"
+              onChange={handleChange}
+              className="w-full border p-3 mb-3"
+            />
 
-        } catch (error) {
+            <input
+              name="website"
+              placeholder="Website"
+              onChange={handleChange}
+              className="w-full border p-3 mb-3"
+            />
 
-            console.log(error);
-            toast.error("Failed to create company");
+            <input
+              name="location"
+              placeholder="Location"
+              onChange={handleChange}
+              className="w-full border p-3 mb-3"
+            />
 
-        }
-
-    };
-
-    return (
-        <>
-            <NavBar />
-
-            <div className="max-w-3xl mx-auto mt-10">
-
-                <form
-                    onSubmit={handleSubmit}
-                    className="bg-white p-6 rounded shadow"
-                >
-
-                    <h1 className="text-3xl font-bold mb-6">
-                        Create Company
-                    </h1>
-
-                    <input
-                        name="name"
-                        placeholder="Company Name"
-                        onChange={handleChange}
-                        className="w-full border p-3 mb-3"
-                    />
-
-                    <textarea
-                        name="description"
-                        placeholder="Description"
-                        onChange={handleChange}
-                        className="w-full border p-3 mb-3"
-                    />
-
-                    <input
-                        name="website"
-                        placeholder="Website"
-                        onChange={handleChange}
-                        className="w-full border p-3 mb-3"
-                    />
-
-                    <input
-                        name="location"
-                        placeholder="Location"
-                        onChange={handleChange}
-                        className="w-full border p-3 mb-3"
-                    />
-
-                    <button
-                        className="bg-blue-600 text-white px-5 py-3 rounded"
-                    >
-                        Create Company
-                    </button>
-
-                </form>
-
-            </div>
-        </>
-    );
+            <button className="bg-blue-600 text-white px-5 py-3 rounded">
+              Create Company
+            </button>
+          </form>
+        </div>
+      </div>
+    </>
+  );
 }
 
 export default CreateCompany;
