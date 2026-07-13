@@ -1,6 +1,6 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
-import NavBar from "../../components/navBar";
+import RecruiterSideBar from "../../components/recruiter/RecruiterSidebar";
 import api from "../../services/api";
 
 function CreateJob() {
@@ -57,9 +57,14 @@ function CreateJob() {
 
     return (
         <>
-            <NavBar />
+         
+    <div className="flex min-h-screen bg-gray-100">
 
-            <div className="max-w-4xl mx-auto mt-10">
+        <RecruiterSideBar />
+
+        <div className="flex-1 p-5">
+
+            <div className="max-w-3xl bg-white rounded-lg shadow p-6">
 
                 <form
                     onSubmit={handleSubmit}
@@ -128,6 +133,8 @@ function CreateJob() {
                 </form>
 
             </div>
+        </div>
+    </div>
         </>
     );
 }
