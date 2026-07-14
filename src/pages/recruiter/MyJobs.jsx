@@ -16,7 +16,7 @@ const MyJobs = () => {
 
             try {
 
-                const res = await axios.get("/recruiter/jobs");
+                const res = await axios.get("/jobs/myjobs");
 
                 console.log("My Jobs Response:", res.data);
 
