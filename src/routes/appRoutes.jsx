@@ -26,6 +26,7 @@ import Dashboard from "../pages/admin/Dashboard.jsx";
 import ManageApplications from "../pages/admin/ManageApplications.jsx";
 import RecruiterProfile from "../pages/recruiter/Profile.jsx";
 import EditProfile from "../pages/recruiter/EditProfile.jsx";
+import MyJobs from "../pages/recruiter/MyJobs.jsx";
 
 function AppRoutes() {
   return (
@@ -118,6 +119,15 @@ function AppRoutes() {
           element={
             <ProtectedRoute allowedRoles={["recruiter"]}>
               <EditProfile />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/recruiter/jobs"
+          element={
+            <ProtectedRoute allowedRoles={["recruiter"]}>
+              <MyJobs />
             </ProtectedRoute>
           }
         />
