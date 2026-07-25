@@ -8,9 +8,17 @@ import {
     FaSignOutAlt
 } from "react-icons/fa";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function RecruiterSidebar() {
+    const navigate = useNavigate();
+
+    const logout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        localStorage.removeItem("role");
+        navigate("/login");
+    };
 
     return (
 
@@ -84,13 +92,13 @@ function RecruiterSidebar() {
                     Profile
                 </Link>
 
-                <Link
-                    to="/logout"
-                    className="px-6 py-4 hover:bg-red-600 flex items-center gap-3"
+                <button
+                    onClick={logout}
+                    className="w-full px-6 py-4 hover:bg-red-600 flex items-center gap-3 text-left"
                 >
                     <FaSignOutAlt />
                     Logout
-                </Link>
+                </button>
 
             </nav>
 
