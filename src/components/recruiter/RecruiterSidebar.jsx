@@ -22,7 +22,7 @@ function RecruiterSidebar() {
 
     return (
 
-        <div className="w-64 bg-slate-900 text-white min-h-screen">
+        <div className="w-64 bg-slate-900 text-white h-screen sticky top-0 overflow-y-auto">
 
             <div className="text-center py-6">
 

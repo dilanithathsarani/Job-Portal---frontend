@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import NavBar from "../../components/navBar";
 import api from "../../services/api";
@@ -28,7 +29,7 @@ function ManageJobs() {
                     }
                 );
 
-                setJobs(res.data);
+                setJobs(res.data.jobs || []);
 
             } catch (error) {
 

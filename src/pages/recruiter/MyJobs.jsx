@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../services/api";
 import RecruiterSidebar from "../../components/recruiter/RecruiterSidebar";
+import toast from "react-hot-toast";
+import { confirmToast } from "../../utils/confirmToast";
 
 const MyJobs = () => {
 
@@ -44,18 +46,18 @@ const MyJobs = () => {
 
     const deleteJob = async(id)=>{
 
-        const confirmDelete = window.confirm(
+        const confirmed = await confirmToast(
             "Are you sure you want to delete this job?"
         );
 
 
-        if(!confirmDelete) return;
+        if(!confirmed) return;
 
 
         try{
 
             await axios.delete(
-                `/recruiter/jobs/${id}`
+                `/jobs/${id}`
             );
 
 
@@ -64,6 +66,8 @@ const MyJobs = () => {
                     job => job._id !== id
                 )
             );
+
+            toast.success("Job deleted successfully");
 
 
         }

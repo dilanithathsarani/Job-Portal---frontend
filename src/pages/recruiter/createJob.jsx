@@ -75,7 +75,7 @@ function CreateJob() {
 
             await api.post(
                 "/jobs/create",
-                job,
+                jobData,
                 {
                     headers: {
                         Authorization:
