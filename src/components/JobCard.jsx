@@ -7,11 +7,14 @@ function JobCard({ job, initiallySaved = false }) {
 
     const [saved, setSaved] = useState(initiallySaved);
     const token = localStorage.getItem("token");
-    let role = null;
-    try {
-        const user = JSON.parse(localStorage.getItem("user"));
-        role = normalizeRole(user?.role);
-    } catch (e) {}
+    const role = (() => {
+        try {
+            const user = JSON.parse(localStorage.getItem("user"));
+            return normalizeRole(user?.role);
+        } catch {
+            return null;
+        }
+    })();
 
     const handleSave = async () => {
 
@@ -55,45 +58,55 @@ function JobCard({ job, initiallySaved = false }) {
     };
 
     return (
-        <div className="bg-white rounded-xl shadow p-6 mb-4 flex justify-between items-start transition-shadow hover:shadow-md">
-
+        <article className="group flex h-full flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
             <div>
+                <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-blue-700">
+                            {job.jobType || "Job"}
+                        </p>
+                        <h2 className="mt-2 line-clamp-2 text-xl font-black text-slate-950">
+                            {job.title}
+                        </h2>
+                    </div>
 
-                <h2 className="text-xl font-bold mb-1">
-                    {job.title}
-                </h2>
+                    {token && role === "jobseeker" && (
+                        <button
+                            onClick={handleSave}
+                            className={`shrink-0 rounded-full border px-3 py-1.5 text-sm font-semibold transition ${
+                                saved
+                                    ? "border-amber-300 bg-amber-50 text-amber-700"
+                                    : "border-slate-200 bg-white text-slate-600 hover:border-amber-200 hover:bg-amber-50 hover:text-amber-700"
+                            }`}
+                        >
+                            {saved ? "Saved" : "Save"}
+                        </button>
+                    )}
+                </div>
 
-                <p className="text-gray-600 mb-1">
-                    {job.location}
+                <div className="mt-4 space-y-2 text-sm text-slate-600">
+                    <p>{job.location || "Location flexible"}</p>
+                    <p>{job.company?.name || job.company || "Company details available in job view"}</p>
+                </div>
+
+                <p className="mt-4 text-sm leading-6 text-slate-600 line-clamp-3">
+                    {job.description}
                 </p>
+            </div>
 
-                <p className="text-gray-500 text-sm mb-2">
-                    {job.jobType}
-                </p>
-
-                <p className="font-semibold text-green-600 mb-3">
+            <div className="mt-5 flex items-center justify-between gap-4 border-t border-slate-100 pt-4">
+                <p className="text-lg font-black text-emerald-600">
                     Rs. {job.salary}
                 </p>
 
                 <Link
                     to={`/jobs/${job._id}`}
-                    className="text-blue-600 hover:underline font-medium"
+                    className="rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-600"
                 >
-                    View Details
+                    View details
                 </Link>
-
             </div>
-
-            {token && role === "jobseeker" && (
-                <button
-                    onClick={handleSave}
-                    className="text-yellow-500 hover:scale-110 active:scale-95 transition flex items-center gap-1 cursor-pointer font-semibold border border-yellow-200 rounded-lg px-3 py-1 bg-yellow-50/50 hover:bg-yellow-50"
-                >
-                    ⭐ {saved ? "Saved" : "Save"}
-                </button>
-            )}
-
-        </div>
+        </article>
     );
 }
 
