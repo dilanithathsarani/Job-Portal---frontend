@@ -3,6 +3,7 @@ import api from "../../services/api";
 import JobCard from "../../components/JobCard";
 import Loader from "../../components/Loader";
 import NavBar from "../../components/navBar";
+import { normalizeRole } from "../../utils/roles";
 
 function Jobs() {
 
@@ -43,7 +44,7 @@ function Jobs() {
 
             const user = JSON.parse(localStorage.getItem("user"));
 
-            if (user?.role !== "jobseeker") return;
+            if (normalizeRole(user?.role) !== "jobseeker") return;
 
             const res = await api.get(
                 "/users/saved-jobs",

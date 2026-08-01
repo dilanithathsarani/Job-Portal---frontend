@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import api from "../../services/api";
 import authImage from "../../assets/login.png";
+import { normalizeRole } from "../../utils/roles";
 
 function Login() {
   const navigate = useNavigate();
@@ -29,15 +30,16 @@ function Login() {
 
       const res = await api.post("/auth/login", formData);
 
+      const user = { ...res.data.user, role: normalizeRole(res.data.user.role) };
       localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-      localStorage.setItem("role", res.data.user.role);
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("role", user.role);
 
       toast.success("Login Successful");
 
-      if (res.data.user.role === "admin") {
+      if (user.role === "admin") {
         navigate("/admin/dashboard");
-      } else if (res.data.user.role === "employer") {
+      } else if (user.role === "employer") {
         navigate("/recruiter/dashboard");
       } else {
         navigate("/");

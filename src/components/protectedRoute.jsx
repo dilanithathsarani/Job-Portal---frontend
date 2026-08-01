@@ -1,4 +1,5 @@
 import { Navigate } from "react-router-dom";
+import { normalizeRole } from "../utils/roles";
 
 function ProtectedRoute({ children, allowedRoles }) {
   const token = localStorage.getItem("token");
@@ -8,7 +9,7 @@ function ProtectedRoute({ children, allowedRoles }) {
   if (!token) {
     return <Navigate to="/login" replace />;
   }
-  if (allowedRoles && (!user || !allowedRoles.includes(user.role))) {
+  if (allowedRoles && (!user || !allowedRoles.includes(normalizeRole(user.role)))) {
     return <Navigate to="/" replace />;
   }
   return children;

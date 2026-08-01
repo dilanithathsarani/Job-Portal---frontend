@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
+import { normalizeRole } from "../utils/roles";
 
 function JobCard({ job, initiallySaved = false }) {
 
@@ -9,7 +10,7 @@ function JobCard({ job, initiallySaved = false }) {
     let role = null;
     try {
         const user = JSON.parse(localStorage.getItem("user"));
-        role = user?.role;
+        role = normalizeRole(user?.role);
     } catch (e) {}
 
     const handleSave = async () => {

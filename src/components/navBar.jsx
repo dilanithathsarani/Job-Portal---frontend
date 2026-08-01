@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import NotificationBell from "./NotificationBell";
+import { normalizeRole } from "../utils/roles";
 
 function Navbar() {
   const token = localStorage.getItem("token");
@@ -10,7 +11,7 @@ function Navbar() {
   let role = null;
   try {
     const user = JSON.parse(localStorage.getItem("user"));
-    role = user?.role;
+    role = normalizeRole(user?.role);
   } catch (e) {
     console.error("Error parsing user from localStorage:", e);
   }
