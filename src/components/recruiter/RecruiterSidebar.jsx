@@ -7,6 +7,7 @@ import {
     FaUser,
     FaSignOutAlt
 } from "react-icons/fa";
+import { LayoutDashboard } from "lucide-react";
 
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
@@ -36,10 +37,16 @@ function RecruiterSidebar() {
 
     return (
         <div className="w-64 bg-slate-900 text-white h-screen sticky top-0 flex flex-col shadow-2xl z-10">
-            <div className="text-center py-8 border-b border-slate-700/50">
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
-                    Recruiter Panel
-                </h2>
+            <div className="py-8 px-5 border-b border-slate-700/50">
+                <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center">
+                        <LayoutDashboard size={16} className="text-white" />
+                    </div>
+                    <div>
+                        <h1 className="text-3xl font-bold text-white leading-tight">JobPortal</h1>
+                        <p className="text-m text-slate-400">Recruiter Panel</p>
+                    </div>
+                </div>
             </div>
 
             <nav className="flex flex-col flex-1 py-6 px-3 gap-2 overflow-y-auto">
