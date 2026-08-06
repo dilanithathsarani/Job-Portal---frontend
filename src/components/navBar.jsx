@@ -1,20 +1,84 @@
-import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import {
+  BriefcaseBusiness,
+  ChevronDown,
+  LogOut,
+  Menu,
+  Sparkles,
+  UserRound,
+  X,
+} from "lucide-react";
 import NotificationBell from "./NotificationBell";
 import { normalizeRole } from "../utils/roles";
 
+const aiLinks = [
+  { label: "AI Interview", to: "/ai/interview" },
+  { label: "Resume Analyzer", to: "/ai/resume-analyzer" },
+  { label: "Cover Letter", to: "/ai/cover-letter" },
+  { label: "Career Advisor", to: "/ai/career-advisor" },
+  { label: "AI Job Matches", to: "/ai/recommendations" },
+];
+
+const accountLinks = {
+  jobseeker: [
+    { label: "Profile", to: "/profile" },
+    { label: "Applied Jobs", to: "/applied-jobs" },
+  ],
+  recruiter: [
+    { label: "Dashboard", to: "/recruiter/dashboard" },
+    { label: "Company", to: "/recruiter/company" },
+    { label: "Create Job", to: "/recruiter/create-job" },
+    { label: "Manage Jobs", to: "/recruiter/manage-jobs" },
+  ],
+  admin: [
+    { label: "Admin Dashboard", to: "/admin/dashboard" },
+    { label: "Manage Users", to: "/admin/users" },
+    { label: "Manage Jobs", to: "/admin/jobs" },
+  ],
+};
+
+const navClass = ({ isActive }) =>
+  `rounded-lg px-3 py-2 text-sm font-medium transition ${
+    isActive
+      ? "bg-blue-50 text-blue-700"
+      : "text-slate-600 hover:bg-slate-50 hover:text-slate-950"
+  }`;
+
 function Navbar() {
+  const location = useLocation();
   const token = localStorage.getItem("token");
-  const [open, setOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  const [accountOpen, setAccountOpen] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const accountRef = useRef(null);
+  const aiRef = useRef(null);
 
   let role = null;
   try {
-    const user = JSON.parse(localStorage.getItem("user"));
-    role = normalizeRole(user?.role);
-  } catch (e) {
-    console.error("Error parsing user from localStorage:", e);
+    role = normalizeRole(JSON.parse(localStorage.getItem("user"))?.role);
+  } catch (error) {
+    console.error("Error parsing user from localStorage:", error);
   }
+
+  const roleLinks = accountLinks[role] || [];
+  const aiActive = location.pathname.startsWith("/ai/");
+  const accountActive = roleLinks.some(({ to }) => location.pathname.startsWith(to));
+
+  useEffect(() => {
+    setMobileOpen(false);
+    setAiOpen(false);
+    setAccountOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const closeMenus = (event) => {
+      if (accountRef.current && !accountRef.current.contains(event.target)) setAccountOpen(false);
+      if (aiRef.current && !aiRef.current.contains(event.target)) setAiOpen(false);
+    };
+    document.addEventListener("mousedown", closeMenus);
+    return () => document.removeEventListener("mousedown", closeMenus);
+  }, []);
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -22,332 +86,59 @@ function Navbar() {
     window.location.href = "/login";
   };
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   return (
-    <nav className="bg-blue-600 text-white px-6 py-4 shadow-lg">
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <Link
-          to="/"
-          className="font-bold text-xl tracking-wide hover:text-gray-100 transition"
-        >
-          Job Portal
+    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
+      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10">
+        <Link to="/" className="flex items-center gap-2.5 text-slate-950">
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white">
+            <BriefcaseBusiness size={19} />
+          </span>
+          <span className="text-lg font-bold tracking-tight">Job Portal</span>
         </Link>
 
-        <div className="flex items-center space-x-5">
-          <Link to="/" className="hover:text-gray-200 transition">
-            Home
-          </Link>
+        <div className="hidden items-center gap-1 lg:flex">
+          <NavLink to="/" end className={navClass}>Home</NavLink>
+          <NavLink to="/jobs" className={navClass}>Jobs</NavLink>
 
-          <Link to="/jobs" className="hover:text-gray-200 transition">
-            Jobs
-          </Link>
+          <div className="relative" ref={aiRef}>
+            <button
+              type="button"
+              onClick={() => setAiOpen((current) => !current)}
+              className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition ${aiActive ? "bg-blue-50 text-blue-700" : "text-slate-600 hover:bg-slate-50 hover:text-slate-950"}`}
+              aria-expanded={aiOpen}
+            >
+              AI Tools <ChevronDown size={15} className={`transition ${aiOpen ? "rotate-180" : ""}`} />
+            </button>
+            {aiOpen && (
+              <div className="absolute left-0 mt-2 w-56 rounded-xl border border-slate-200 bg-white p-2 shadow-xl">
+                <p className="px-3 pb-2 pt-1 text-xs font-semibold uppercase tracking-wider text-slate-400">Career tools</p>
+                {aiLinks.map((item) => <DropdownLink key={item.to} {...item} pathname={location.pathname} />)}
+              </div>
+            )}
+          </div>
+        </div>
 
-          <Link to="/ai/interview">AI Interview</Link>
-
-          <Link to="/ai/resume-analyzer">AI Resume Analyzer</Link>
-
-          <Link to="/ai/cover-letter">AI Cover Letter</Link>
-
-          <Link to="/ai/career-advisor">AI Career Advisor</Link>
-
-          <Link to="/ai/recommendations">AI Jobs</Link>
-
+        <div className="hidden items-center gap-3 lg:flex">
           {token ? (
             <>
               <NotificationBell />
-              <div className="relative" ref={dropdownRef}>
+              <div className="relative" ref={accountRef}>
                 <button
-                  onClick={() => setOpen(!open)}
-                  className="flex items-center gap-2 bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-lg transition cursor-pointer"
+                  type="button"
+                  onClick={() => setAccountOpen((current) => !current)}
+                  className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition ${accountActive ? "border-blue-200 bg-blue-50 text-blue-700" : "border-slate-200 text-slate-700 hover:bg-slate-50"}`}
+                  aria-expanded={accountOpen}
                 >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                  </svg>
-                  My Account
-                  <svg
-                    className={`w-4 h-4 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
+                  <UserRound size={17} /> Account
+                  <ChevronDown size={15} className={`transition ${accountOpen ? "rotate-180" : ""}`} />
                 </button>
-
-                {open && (
-                  <div className="absolute right-0 mt-2 w-56 bg-white text-gray-800 rounded-xl shadow-2xl border border-gray-100 py-2 z-50 animate-fadeIn">
-                    {/* Job Seeker Links */}
-                    {role === "jobseeker" && (
-                      <>
-                        <div className="px-4 py-1 border-b border-gray-100">
-                          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                            Job Seeker
-                          </p>
-                        </div>
-
-                        <Link
-                          to="/profile"
-                          onClick={() => setOpen(false)}
-                          className="flex items-center gap-3 px-4 py-2.5 hover:bg-blue-50 transition text-sm"
-                        >
-                          <svg
-                            className="w-4 h-4 text-blue-500"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                            />
-                          </svg>
-                          Profile
-                        </Link>
-
-                        <Link
-                          to="/applied-jobs"
-                          onClick={() => setOpen(false)}
-                          className="flex items-center gap-3 px-4 py-2.5 hover:bg-blue-50 transition text-sm"
-                        >
-                          <svg
-                            className="w-4 h-4 text-green-500"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
-                            />
-                          </svg>
-                          Applied Jobs
-                        </Link>
-                      </>
-                    )}
-
-                    {/* Recruiter Links */}
-                    {role === "recruiter" && (
-                      <>
-                        <div className="px-4 py-1 border-b border-gray-100">
-                          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                            Recruiter
-                          </p>
-                        </div>
-
-                        <Link
-                          to="/recruiter/dashboard"
-                          onClick={() => setOpen(false)}
-                          className="flex items-center gap-3 px-4 py-2.5 hover:bg-blue-50 transition text-sm"
-                        >
-                          <svg
-                            className="w-4 h-4 text-purple-500"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
-                            />
-                          </svg>
-                          Dashboard
-                        </Link>
-
-                        <Link
-                          to="/recruiter/company"
-                          onClick={() => setOpen(false)}
-                          className="flex items-center gap-3 px-4 py-2.5 hover:bg-blue-50 transition text-sm"
-                        >
-                          <svg
-                            className="w-4 h-4 text-indigo-500"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                            />
-                          </svg>
-                          Company
-                        </Link>
-
-                        <Link
-                          to="/recruiter/create-job"
-                          onClick={() => setOpen(false)}
-                          className="flex items-center gap-3 px-4 py-2.5 hover:bg-blue-50 transition text-sm"
-                        >
-                          <svg
-                            className="w-4 h-4 text-teal-500"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M12 4v16m8-8H4"
-                            />
-                          </svg>
-                          Create Job
-                        </Link>
-
-                        <Link
-                          to="/recruiter/manage-jobs"
-                          onClick={() => setOpen(false)}
-                          className="flex items-center gap-3 px-4 py-2.5 hover:bg-blue-50 transition text-sm"
-                        >
-                          <svg
-                            className="w-4 h-4 text-orange-500"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                            />
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                            />
-                          </svg>
-                          Manage Jobs
-                        </Link>
-                      </>
-                    )}
-
-                    {/* Admin Links */}
-                    {role === "admin" && (
-                      <>
-                        <div className="px-4 py-1 border-b border-gray-100">
-                          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                            Admin
-                          </p>
-                        </div>
-
-                        <Link
-                          to="/admin/dashboard"
-                          onClick={() => setOpen(false)}
-                          className="flex items-center gap-3 px-4 py-2.5 hover:bg-blue-50 transition text-sm"
-                        >
-                          <svg
-                            className="w-4 h-4 text-red-500"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                            />
-                          </svg>
-                          Admin Dashboard
-                        </Link>
-
-                        <Link
-                          to="/admin/users"
-                          onClick={() => setOpen(false)}
-                          className="flex items-center gap-3 px-4 py-2.5 hover:bg-blue-50 transition text-sm"
-                        >
-                          <svg
-                            className="w-4 h-4 text-rose-500"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-                            />
-                          </svg>
-                          Manage Users
-                        </Link>
-
-                        <Link
-                          to="/admin/jobs"
-                          onClick={() => setOpen(false)}
-                          className="flex items-center gap-3 px-4 py-2.5 hover:bg-blue-50 transition text-sm"
-                        >
-                          <svg
-                            className="w-4 h-4 text-orange-500"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                            />
-                          </svg>
-                          Manage Jobs
-                        </Link>
-                      </>
-                    )}
-
-                    <div className="border-t border-gray-100 mt-1 pt-1">
-                      <button
-                        onClick={logout}
-                        className="flex items-center gap-3 w-full px-4 py-2.5 hover:bg-red-50 transition text-sm text-red-600 cursor-pointer"
-                      >
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                          />
-                        </svg>
-                        Logout
+                {accountOpen && (
+                  <div className="absolute right-0 mt-2 w-56 rounded-xl border border-slate-200 bg-white p-2 shadow-xl">
+                    <p className="px-3 pb-2 pt-1 text-xs font-semibold uppercase tracking-wider text-slate-400">{role || "Account"}</p>
+                    {roleLinks.map((item) => <DropdownLink key={item.to} {...item} pathname={location.pathname} />)}
+                    <div className="mt-2 border-t border-slate-100 pt-2">
+                      <button onClick={logout} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-rose-600 hover:bg-rose-50">
+                        <LogOut size={16} /> Logout
                       </button>
                     </div>
                   </div>
@@ -355,22 +146,59 @@ function Navbar() {
               </div>
             </>
           ) : (
-            <div className="flex items-center space-x-3">
-              <Link to="/login" className="hover:text-gray-200 transition">
-                Login
-              </Link>
-              <Link
-                to="/register"
-                className="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition"
-              >
-                Register
-              </Link>
-            </div>
+            <>
+              <NavLink to="/login" className={navClass}>Login</NavLink>
+              <Link to="/register" className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">Create account</Link>
+            </>
           )}
         </div>
-      </div>
-    </nav>
+
+        <button type="button" onClick={() => setMobileOpen((current) => !current)} className="rounded-lg border border-slate-200 p-2 text-slate-700 lg:hidden" aria-label="Toggle navigation">
+          {mobileOpen ? <X size={21} /> : <Menu size={21} />}
+        </button>
+      </nav>
+
+      {mobileOpen && (
+        <div className="border-t border-slate-200 bg-white px-5 py-4 lg:hidden">
+          <div className="mx-auto max-w-7xl space-y-1">
+            <MobileLink to="/" label="Home" pathname={location.pathname} exact />
+            <MobileLink to="/jobs" label="Jobs" pathname={location.pathname} />
+
+            <p className="px-3 pb-1 pt-4 text-xs font-semibold uppercase tracking-wider text-slate-400">AI Tools</p>
+            {aiLinks.map((item) => <MobileLink key={item.to} {...item} pathname={location.pathname} />)}
+
+            {token ? (
+              <>
+                <p className="px-3 pb-1 pt-4 text-xs font-semibold uppercase tracking-wider text-slate-400">Account</p>
+                {roleLinks.map((item) => <MobileLink key={item.to} {...item} pathname={location.pathname} />)}
+                <button onClick={logout} className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-rose-600 hover:bg-rose-50"><LogOut size={16} /> Logout</button>
+              </>
+            ) : (
+              <div className="grid grid-cols-2 gap-3 pt-4">
+                <Link to="/login" className="rounded-lg border border-slate-200 px-4 py-2.5 text-center text-sm font-semibold text-slate-700">Login</Link>
+                <Link to="/register" className="rounded-lg bg-blue-600 px-4 py-2.5 text-center text-sm font-semibold text-white">Create account</Link>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </header>
   );
+}
+
+function DropdownLink({ label, to, pathname }) {
+  const active = pathname === to || pathname.startsWith(`${to}/`);
+  return (
+    <Link to={to} className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm transition ${active ? "bg-blue-50 font-semibold text-blue-700" : "text-slate-600 hover:bg-slate-50 hover:text-slate-950"}`}>
+      <span className="flex items-center gap-2"><Sparkles size={15} className={active ? "text-blue-600" : "text-slate-400"} />{label}</span>
+      {active && <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />}
+    </Link>
+  );
+}
+
+function MobileLink({ label, to, pathname, exact = false }) {
+  const active = exact ? pathname === to : pathname === to || pathname.startsWith(`${to}/`);
+  return <Link to={to} className={`block rounded-lg px-3 py-2.5 text-sm font-medium ${active ? "bg-blue-50 text-blue-700" : "text-slate-600 hover:bg-slate-50"}`}>{label}</Link>;
 }
 
 export default Navbar;
