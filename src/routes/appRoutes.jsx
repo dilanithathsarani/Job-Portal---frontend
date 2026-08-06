@@ -4,6 +4,7 @@ import Register from "../pages/auth/register.jsx";
 import Home from "../pages/home.jsx";
 import Jobs from "../pages/jobs/jobs.jsx";
 import Profile from "../pages/profile/profile.jsx";
+import EditJobSeekerProfile from "../pages/profile/EditProfile.jsx";
 import ProtectedRoute from "../components/protectedRoute.jsx";
 import AppliedJobs from "../pages/jobs/appliedJobs.jsx";
 import JobDetails from "../pages/jobs/jobDetails.jsx";
@@ -25,7 +26,7 @@ import AdminRoute from "./AdminRoute.jsx";
 import Dashboard from "../pages/admin/Dashboard.jsx";
 import ManageApplications from "../pages/admin/ManageApplications.jsx";
 import RecruiterProfile from "../pages/recruiter/Profile.jsx";
-import EditProfile from "../pages/recruiter/EditProfile.jsx";
+import EditRecruiterProfile from "../pages/recruiter/EditProfile.jsx";
 import MyJobs from "../pages/recruiter/MyJobs.jsx";
 import EditJob from "../pages/recruiter/EditJob.jsx";
 import Analytics from "../pages/recruiter/Analytics.jsx";
@@ -47,6 +48,15 @@ function AppRoutes() {
           element={
             <ProtectedRoute>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/profile/edit"
+          element={
+            <ProtectedRoute>
+              <EditJobSeekerProfile />
             </ProtectedRoute>
           }
         />
@@ -147,7 +157,7 @@ function AppRoutes() {
           path="/recruiter/edit-profile"
           element={
             <ProtectedRoute allowedRoles={["recruiter"]}>
-              <EditProfile />
+              <EditRecruiterProfile />
             </ProtectedRoute>
           }
         />
