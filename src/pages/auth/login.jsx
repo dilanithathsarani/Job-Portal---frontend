@@ -1,157 +1,94 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { ArrowRight, BriefcaseBusiness, CheckCircle2, LockKeyhole, Mail } from "lucide-react";
 import api from "../../services/api";
-import authImage from "../../assets/login.png";
+import authImage from "../../assets/login-professional.jpg";
 import { normalizeRole } from "../../utils/roles";
 
 function Login() {
   const navigate = useNavigate();
-
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const handleChange = (event) => {
+    setFormData((current) => ({ ...current, [event.target.name]: event.target.value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
       setLoading(true);
+      const response = await api.post("/auth/login", formData);
+      const user = { ...response.data.user, role: normalizeRole(response.data.user.role) };
 
-      const res = await api.post("/auth/login", formData);
-
-      const user = { ...res.data.user, role: normalizeRole(res.data.user.role) };
-      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("role", user.role);
+      toast.success("Login successful");
 
-      toast.success("Login Successful");
-
-      if (user.role === "admin") {
-        navigate("/admin/dashboard");
-      } else if (user.role === "employer") {
-        navigate("/recruiter/dashboard");
-      } else {
-        navigate("/");
-      }
+      if (user.role === "admin") navigate("/admin/dashboard");
+      else if (user.role === "recruiter") navigate("/recruiter/dashboard");
+      else navigate("/");
     } catch (error) {
-      toast.error(error.response?.data?.message || "Login Failed");
+      toast.error(error.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <main className="relative isolate flex h-dvh items-start justify-center overflow-hidden bg-slate-950 px-4 py-4 text-slate-950 sm:px-6 sm:py-6 lg:items-center lg:px-8 lg:py-8">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(37,99,235,0.28),_transparent_34%),linear-gradient(135deg,_#020617_0%,_#0f172a_52%,_#1e3a8a_100%)]" />
-
-      <div className="relative mx-auto grid h-full w-full max-w-6xl overflow-hidden rounded-[1.75rem] bg-white shadow-2xl shadow-blue-950/30 lg:grid-cols-[0.92fr_1.08fr]">
-        <section className="hidden overflow-hidden bg-slate-950 p-8 text-white lg:flex lg:flex-col lg:justify-between xl:p-10">
-          <div className="animate-auth-rise">
-            <Link
-              to="/"
-              className="text-sm font-black uppercase tracking-[0.24em] text-blue-200"
-            >
-              AI Job Portal
-            </Link>
-            <h1 className="mt-10 text-4xl font-black leading-tight xl:text-5xl">
-              Welcome back to your next opportunity.
-            </h1>
-            <p className="mt-4 max-w-md text-base leading-7 text-slate-300 xl:text-m xl:leading-8">
-              Continue tracking saved roles, applications, and job matches from
-              one calm workspace.
-            </p>
-          </div>
-
-          <div className="relative animate-auth-float">
-            <div className="absolute inset-10 rounded-full bg-blue-500/20 blur-3xl" />
-            <img
-              src={authImage}
-              alt="Job portal brand graphic"
-              className="relative mx-auto w-90 object-contain drop-shadow-2xl xl:w-100"
-            />
+    <main className="h-dvh overflow-hidden bg-slate-100 p-3 sm:p-4 lg:p-6">
+      <div className="mx-auto grid h-full max-w-6xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-300/30 lg:grid-cols-2">
+        <section className="relative hidden overflow-hidden lg:block">
+          <img src={authImage} alt="Professional exploring job opportunities on a laptop" className="absolute inset-0 h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 p-10 text-white xl:p-12">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-blue-200">Welcome back</p>
+            <h1 className="mt-3 max-w-md text-4xl font-bold leading-tight">Your next opportunity is waiting.</h1>
+            <p className="mt-4 max-w-md leading-7 text-slate-200">Sign in to continue your search, manage applications, and stay connected to the right roles.</p>
           </div>
         </section>
 
-        <section className="flex items-start justify-center px-5 py-5 sm:px-8 sm:py-7 lg:items-center lg:px-10 lg:py-6">
-          <div className="w-full max-w-sm animate-auth-rise xl:max-w-md">
-            <div className="mb-4 lg:hidden">
-              <Link
-                to="/"
-                className="text-sm font-black uppercase tracking-[0.24em] text-blue-700"
-              >
-                Job Portal
-              </Link>
+        <section className="flex h-full items-center justify-center overflow-hidden px-6 py-6 sm:px-10 lg:px-14 xl:px-20">
+          <div className="w-full max-w-md">
+            <Link to="/" className="inline-flex items-center gap-2.5 text-slate-950">
+              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600 text-white"><BriefcaseBusiness size={20} /></span>
+              <span className="text-xl font-bold tracking-tight">Job Portal</span>
+            </Link>
+
+            <div className="mt-10">
+              <h2 className="text-3xl font-bold tracking-tight text-slate-950">Sign in to your account</h2>
+              <p className="mt-2 text-slate-500">Enter your details to continue.</p>
             </div>
 
-            <p className="text-[0.7rem] font-black uppercase tracking-[0.2em] text-blue-600 sm:text-sm">
-              Login
-            </p>
-            <h2 className="mt-1 text-2xl font-black text-slate-950 sm:text-4xl">
-              Sign in to continue
-            </h2>
-            <p className="mt-1.5 text-sm leading-5 text-slate-600 sm:text-base sm:leading-7">
-              Access your job search dashboard and pick up right where you left
-              off.
-            </p>
-
-            <form onSubmit={handleSubmit} className="mt-5 space-y-3.5">
+            <form onSubmit={handleSubmit} className="mt-8 space-y-5">
               <div>
-                <label className="mb-1 block text-sm font-bold text-slate-700">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="you@example.com"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-950 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100 sm:text-base"
-                />
+                <label htmlFor="login-email" className="mb-2 block text-sm font-semibold text-slate-700">Email address</label>
+                <div className="relative">
+                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                  <input id="login-email" type="email" name="email" value={formData.email} onChange={handleChange} placeholder="you@example.com" required autoComplete="email" className="w-full rounded-lg border border-slate-300 bg-white py-3 pl-11 pr-4 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100" />
+                </div>
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-bold text-slate-700">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Enter your password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-950 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100 sm:text-base"
-                />
+                <label htmlFor="login-password" className="mb-2 block text-sm font-semibold text-slate-700">Password</label>
+                <div className="relative">
+                  <LockKeyhole className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                  <input id="login-password" type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Enter your password" required autoComplete="current-password" className="w-full rounded-lg border border-slate-300 bg-white py-3 pl-11 pr-4 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100" />
+                </div>
               </div>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full rounded-lg bg-blue-600 px-5 py-3 font-black text-white shadow-xl shadow-blue-100 transition duration-300 hover:-translate-y-0.5 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {loading ? "Logging in..." : "Login"}
+              <button type="submit" disabled={loading} className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 py-3.5 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60">
+                {loading ? "Signing in..." : "Sign in"} {!loading && <ArrowRight size={18} />}
               </button>
             </form>
 
-            <p className="mt-3 text-center text-sm text-slate-600">
-              Don't have an account?
-              <Link
-                to="/register"
-                className="ml-1 font-black text-blue-700 transition hover:text-blue-500"
-              >
-                Register
-              </Link>
-            </p>
+            <div className="mt-6 flex items-center gap-2 rounded-lg bg-slate-50 px-4 py-3 text-sm text-slate-600">
+              <CheckCircle2 size={17} className="shrink-0 text-emerald-600" /> Your account details are securely protected.
+            </div>
+
+            <p className="mt-7 text-center text-sm text-slate-600">New to Job Portal? <Link to="/register" className="font-semibold text-blue-600 hover:text-blue-700">Create an account</Link></p>
           </div>
         </section>
       </div>
