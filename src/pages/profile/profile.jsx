@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import api from "../../services/api";
 import NavBar from "../../components/navBar";
+import Footer from "../../components/footer";
 
 function Profile() {
 
@@ -252,6 +253,8 @@ function Profile() {
                 </div>
 
             </div>
+
+            <Footer />
 
         </>
 

@@ -3,6 +3,7 @@ import api from "../../services/api";
 import JobCard from "../../components/JobCard";
 import Loader from "../../components/Loader";
 import NavBar from "../../components/navBar";
+import Footer from "../../components/footer";
 import { normalizeRole } from "../../utils/roles";
 
 const normalize = (value) =>
@@ -322,6 +323,7 @@ function Jobs() {
                     )}
                 </section>
             </main>
+            <Footer />
         </>
     );
 }

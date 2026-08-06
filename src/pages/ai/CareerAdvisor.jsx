@@ -1,6 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import NavBar from "../../components/navBar";
+import Footer from "../../components/footer";
 import api from "../../services/api";
 
 const buildFallbackAdvice = (question) => {
@@ -150,6 +151,8 @@ function CareerAdvisor() {
                     </section>
                 </div>
             </main>
+
+            <Footer />
 
         </>
 

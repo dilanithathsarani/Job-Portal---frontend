@@ -2,6 +2,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import api from "../../services/api";
 import Navbar from "../../components/navBar";
+import Footer from "../../components/footer";
 
 const buildFallbackQuestions = (title) => {
 
@@ -130,6 +131,8 @@ function InterviewGenerator() {
                     </section>
                 </div>
             </main>
+
+            <Footer />
 
         </>
 

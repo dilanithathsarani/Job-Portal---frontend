@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import NavBar from "../components/navBar";
 import heroImage from "../assets/home.png";
-import Footer from "../components/Footer";
+import Footer from "../components/footer";
 
 function Home() {
     const stats = [

@@ -2,6 +2,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import api from "../../services/api";
 import Navbar from "../../components/navBar";
+import Footer from "../../components/footer";
 
 const buildFallbackAnalysis = (fileName) => {
     return [
@@ -169,6 +170,8 @@ function ResumeAnalyzer() {
                     </section>
                 </div>
             </main>
+
+            <Footer />
 
         </>
     );
