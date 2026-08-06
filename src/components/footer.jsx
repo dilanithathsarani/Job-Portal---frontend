@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { BriefcaseBusiness } from "lucide-react";
 
 const exploreLinks = [
     { label: "Home", to: "/" },
@@ -34,8 +35,8 @@ function Footer() {
                             to="/"
                             className="inline-flex items-center gap-2 text-xl font-black text-white transition hover:text-blue-200"
                         >
-                            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-sm font-black text-white shadow-lg shadow-blue-900/40">
-                                JP
+                            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white">
+                                <BriefcaseBusiness size={19} />
                             </span>
                             Job Portal
                         </Link>
