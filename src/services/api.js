@@ -9,6 +9,16 @@ const api = axios.create({
 
 // Attach JWT token to every request automatically
 api.interceptors.request.use((config) => {
+    // Let the browser set multipart boundaries for FormData uploads.
+    if (typeof FormData !== "undefined" && config.data instanceof FormData) {
+        if (config.headers && typeof config.headers.set === "function") {
+            config.headers.delete("Content-Type");
+        } else if (config.headers) {
+            delete config.headers["Content-Type"];
+            delete config.headers["content-type"];
+        }
+    }
+
     const token = localStorage.getItem("token");
     if (token) {
         if (config.headers && typeof config.headers.set === 'function') {
