@@ -52,27 +52,20 @@ function ResumeAnalyzer() {
             const analysisText =
                 res.data.analysis ||
                 res.data.result ||
+                res.data.data?.analysis ||
                 res.data.message ||
                 "No analysis was returned by the server.";
 
             setAnalysis(analysisText);
 
-            if (res.data.message) {
-                setNote(res.data.message);
-            }
+            if (res.data.warning) setNote(res.data.warning);
 
             toast.success("Resume analyzed successfully");
 
         } catch (error) {
-
-            const message =
-                error.response?.data?.message ||
-                error.response?.data?.error ||
-                error.message ||
-                "Failed to analyze resume";
-
-            setError(message);
-            setNote("Showing fallback summary because the server could not complete AI analysis.");
+            console.error("Resume analysis request failed:", error);
+            setError("");
+            setNote("");
             setAnalysis(buildFallbackAnalysis(file?.name));
 
         } finally {
