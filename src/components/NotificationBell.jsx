@@ -99,7 +99,7 @@ function NotificationBell() {
         >
             <button
                 onClick={() => setOpen(!open)}
-                className="relative rounded-lg p-2 text-slate-600 transition hover:bg-slate-50 hover:text-slate-950 focus:outline-none cursor-pointer"
+                className="relative rounded-lg p-2 text-white transition hover:bg-white/10 focus:outline-none cursor-pointer"
             >
                 <svg
                     className="w-6 h-6"

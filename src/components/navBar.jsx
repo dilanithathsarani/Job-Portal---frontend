@@ -41,8 +41,8 @@ const accountLinks = {
 const navClass = ({ isActive }) =>
   `rounded-lg px-3 py-2 text-sm font-medium transition ${
     isActive
-      ? "bg-blue-50 text-blue-700"
-      : "text-slate-600 hover:bg-slate-50 hover:text-slate-950"
+      ? "bg-white text-blue-700 shadow-sm"
+      : "text-blue-100 hover:bg-white/10 hover:text-white"
   }`;
 
 function Navbar() {
@@ -87,10 +87,10 @@ function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
+    <header className="sticky top-0 z-50 bg-blue-600 text-white shadow-md">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10">
-        <Link to="/" className="flex items-center gap-2.5 text-slate-950">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white">
+        <Link to="/" className="flex items-center gap-2.5 text-white">
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white text-blue-600">
             <BriefcaseBusiness size={19} />
           </span>
           <span className="text-lg font-bold tracking-tight">Job Portal</span>
@@ -104,7 +104,7 @@ function Navbar() {
             <button
               type="button"
               onClick={() => setAiOpen((current) => !current)}
-              className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition ${aiActive ? "bg-blue-50 text-blue-700" : "text-slate-600 hover:bg-slate-50 hover:text-slate-950"}`}
+              className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition ${aiActive ? "bg-white text-blue-700 shadow-sm" : "text-blue-100 hover:bg-white/10 hover:text-white"}`}
               aria-expanded={aiOpen}
             >
               AI Tools <ChevronDown size={15} className={`transition ${aiOpen ? "rotate-180" : ""}`} />
@@ -126,7 +126,7 @@ function Navbar() {
                 <button
                   type="button"
                   onClick={() => setAccountOpen((current) => !current)}
-                  className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition ${accountActive ? "border-blue-200 bg-blue-50 text-blue-700" : "border-slate-200 text-slate-700 hover:bg-slate-50"}`}
+                  className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition ${accountActive ? "border-white bg-white text-blue-700" : "border-white/30 text-white hover:bg-white/10"}`}
                   aria-expanded={accountOpen}
                 >
                   <UserRound size={17} /> Account
@@ -148,12 +148,12 @@ function Navbar() {
           ) : (
             <>
               <NavLink to="/login" className={navClass}>Login</NavLink>
-              <Link to="/register" className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">Create account</Link>
+              <Link to="/register" className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-blue-700 transition hover:bg-blue-50">Create account</Link>
             </>
           )}
         </div>
 
-        <button type="button" onClick={() => setMobileOpen((current) => !current)} className="rounded-lg border border-slate-200 p-2 text-slate-700 lg:hidden" aria-label="Toggle navigation">
+        <button type="button" onClick={() => setMobileOpen((current) => !current)} className="rounded-lg border border-white/30 p-2 text-white hover:bg-white/10 lg:hidden" aria-label="Toggle navigation">
           {mobileOpen ? <X size={21} /> : <Menu size={21} />}
         </button>
       </nav>
