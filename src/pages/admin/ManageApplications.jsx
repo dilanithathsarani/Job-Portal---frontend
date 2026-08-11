@@ -1,13 +1,31 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
-import { User, Briefcase, Building2, FileText } from "lucide-react";
+import { Briefcase, Building2, FileText } from "lucide-react";
 
 import api from "../../services/api";
 import AdminSidebar from "../../components/admin/AdminSidebar";
 
+const applicationStatuses = [
+    "Applied",
+    "Under Review",
+    "Shortlisted",
+    "Interview",
+    "Rejected",
+    "Hired",
+];
+
 function ManageApplications() {
     const [applications, setApplications] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [statusFilter, setStatusFilter] = useState("All");
+
+    const filteredApplications = useMemo(() => {
+        if (statusFilter === "All") return applications;
+
+        return applications.filter(
+            (application) => application.status?.toLowerCase() === statusFilter.toLowerCase(),
+        );
+    }, [applications, statusFilter]);
 
     useEffect(() => {
         fetchApplications();
@@ -16,7 +34,7 @@ function ManageApplications() {
     const fetchApplications = async () => {
         try {
             const res = await api.get("/admin/applications");
-            setApplications(res.data.applications);
+            setApplications(Array.isArray(res.data.applications) ? res.data.applications : []);
         } catch (error) {
             console.error(error);
             toast.error("Failed to load applications");
@@ -28,8 +46,8 @@ function ManageApplications() {
     const updateStatus = async (id, status) => {
         try {
             await api.put(`/admin/applications/${id}`, { status });
-            setApplications(
-                applications.map((app) => app._id === id ? { ...app, status } : app)
+            setApplications((currentApplications) =>
+                currentApplications.map((app) => app._id === id ? { ...app, status } : app)
             );
             toast.success("Application status updated");
         } catch (error) {
@@ -80,16 +98,50 @@ function ManageApplications() {
                     )}
                 </div>
 
+                {!loading && applications.length > 0 && (
+                    <div className="mb-6 flex flex-col gap-3 rounded-lg border border-slate-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="flex items-center gap-3">
+                            <label htmlFor="application-status-filter" className="text-sm font-semibold text-slate-700">
+                                Filter by status
+                            </label>
+                            <select
+                                id="application-status-filter"
+                                value={statusFilter}
+                                onChange={(event) => setStatusFilter(event.target.value)}
+                                className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition-colors hover:border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                            >
+                                <option value="All">All applications ({applications.length})</option>
+                                {applicationStatuses.map((status) => {
+                                    const count = applications.filter(
+                                        (application) => application.status?.toLowerCase() === status.toLowerCase(),
+                                    ).length;
+
+                                    return <option key={status} value={status}>{status} ({count})</option>;
+                                })}
+                            </select>
+                        </div>
+                        <p className="text-sm text-slate-500">
+                            Showing {filteredApplications.length} of {applications.length}
+                        </p>
+                    </div>
+                )}
+
                 {/* Table */}
                 {loading ? (
                     <div className="flex justify-center items-center h-64 bg-white rounded-2xl border border-slate-100">
                         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
                     </div>
-                ) : applications.length === 0 ? (
+                ) : filteredApplications.length === 0 ? (
                     <div className="flex flex-col items-center justify-center bg-white rounded-2xl border border-slate-100 p-12 text-center">
                         <FileText size={48} className="text-slate-300 mb-4" />
-                        <h3 className="text-xl font-semibold text-slate-700">No applications found</h3>
-                        <p className="text-slate-500 mt-2">Applications will appear here once candidates apply.</p>
+                        <h3 className="text-xl font-semibold text-slate-700">
+                            {statusFilter === "All" ? "No applications found" : `No ${statusFilter.toLowerCase()} applications`}
+                        </h3>
+                        <p className="text-slate-500 mt-2">
+                            {statusFilter === "All"
+                                ? "Applications will appear here once candidates apply."
+                                : "No applications currently match this status."}
+                        </p>
                     </div>
                 ) : (
                     <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
@@ -105,7 +157,7 @@ function ManageApplications() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {applications.map((app) => {
+                                    {filteredApplications.map((app) => {
                                         const { badge, dot } = statusBadge(app.status);
                                         return (
                                             <tr key={app._id} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
