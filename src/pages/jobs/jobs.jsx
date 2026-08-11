@@ -5,6 +5,7 @@ import Loader from "../../components/Loader";
 import NavBar from "../../components/navBar";
 import Footer from "../../components/footer";
 import { normalizeRole } from "../../utils/roles";
+import { subscribeToJobDeletions } from "../../utils/jobEvents";
 
 const normalize = (value) =>
     String(value ?? "").trim().toLowerCase();
@@ -64,6 +65,16 @@ function Jobs() {
 
     const hasActiveFilters = search.trim() !== "" || jobType !== "";
     const visibleJobs = filteredJobs;
+
+    useEffect(() => subscribeToJobDeletions((jobId) => {
+        setJobs((currentJobs) => currentJobs.filter((job) => job._id !== jobId));
+        setFilteredJobs((currentJobs) => currentJobs.filter((job) => job._id !== jobId));
+        setSavedJobIds((currentIds) => {
+            const updatedIds = new Set(currentIds);
+            updatedIds.delete(jobId);
+            return updatedIds;
+        });
+    }), []);
 
     useEffect(() => {
 

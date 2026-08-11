@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import api from "../../services/api";
 import { confirmToast } from "../../utils/confirmToast";
+import { publishJobDeleted, subscribeToJobDeletions } from "../../utils/jobEvents";
 import RecruiterSidebar from "../../components/recruiter/RecruiterSidebar";
 import { FaTrash, FaUsers, FaSearch } from "react-icons/fa";
 
@@ -30,6 +31,10 @@ function ManageJobs() {
         fetchJobs();
     }, []);
 
+    useEffect(() => subscribeToJobDeletions((jobId) => {
+        setJobs((currentJobs) => currentJobs.filter((job) => job._id !== jobId));
+    }), []);
+
     const handleDelete = async (id) => {
         const confirmed = await confirmToast("Are you sure you want to delete this job?");
         if (!confirmed) return;
@@ -42,7 +47,8 @@ function ManageJobs() {
                 }
             });
 
-            setJobs(jobs.filter((job) => job._id !== id));
+            setJobs((currentJobs) => currentJobs.filter((job) => job._id !== id));
+            publishJobDeleted(id);
             toast.success("Job Deleted");
         } catch (error) {
             console.log(error);

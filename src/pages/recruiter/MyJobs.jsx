@@ -4,6 +4,7 @@ import axios from "../../services/api";
 import RecruiterSidebar from "../../components/recruiter/RecruiterSidebar";
 import toast from "react-hot-toast";
 import { confirmToast } from "../../utils/confirmToast";
+import { publishJobDeleted, subscribeToJobDeletions } from "../../utils/jobEvents";
 import { FaBuilding, FaMapMarkerAlt, FaBriefcase, FaMoneyBillWave, FaStar, FaEdit, FaTrash, FaUsers } from "react-icons/fa";
 
 const MyJobs = () => {
@@ -26,6 +27,10 @@ const MyJobs = () => {
         fetchJobs();
     }, []);
 
+    useEffect(() => subscribeToJobDeletions((jobId) => {
+        setJobs((currentJobs) => currentJobs.filter((job) => job._id !== jobId));
+    }), []);
+
     const deleteJob = async(id)=>{
         const confirmed = await confirmToast("Are you sure you want to delete this job?");
         if(!confirmed) return;
@@ -33,6 +38,7 @@ const MyJobs = () => {
         try{
             await axios.delete(`/jobs/${id}`);
             setJobs((previousJobs) => previousJobs.filter(job => job._id !== id));
+            publishJobDeleted(id);
             toast.success("Job deleted successfully");
         }
         catch(error){

@@ -6,6 +6,7 @@ import { Eye } from "lucide-react";
 import api from "../../services/api";
 import { confirmToast } from "../../utils/confirmToast";
 import AdminSidebar from "../../components/admin/AdminSidebar";
+import { subscribeToJobDeletions } from "../../utils/jobEvents";
 
 function ManageJobs() {
     const [jobs, setJobs] = useState([]);
@@ -17,6 +18,12 @@ function ManageJobs() {
     useEffect(() => {
         fetchJobs();
     }, []);
+
+    useEffect(() => subscribeToJobDeletions((jobId) => {
+        setJobs((currentJobs) => currentJobs.filter((job) => job._id !== jobId));
+        setFilteredJobs((currentJobs) => currentJobs.filter((job) => job._id !== jobId));
+        setSelectedJob((currentJob) => currentJob?._id === jobId ? null : currentJob);
+    }), []);
 
     const fetchJobs = async () => {
         try {
