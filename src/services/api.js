@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "http://localhost:5000/api",
+    baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
     headers: {
         "Content-Type": "application/json",
     },
@@ -39,7 +39,7 @@ api.interceptors.response.use(
             localStorage.removeItem("token");
             localStorage.removeItem("user");
             localStorage.removeItem("role");
-            
+
             // Avoid redirect loop if already on login or register page
             if (window.location.pathname !== '/login' && window.location.pathname !== '/register') {
                 window.location.href = "/login";
